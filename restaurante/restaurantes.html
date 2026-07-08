@@ -3,17 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Interactivo - TecnoTrade PTY</title>
+    <title>Menú Interactivo | TecnoTrade PTY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
     
     <style>
         :root {
-            --bg-dark: #090d16;
-            --bg-card: #131a26;
-            --accent-gold: #f59e0b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-base: #080c14;
+            --bg-surface: #111823;
+            --bg-surface-elevated: #1a2436;
+            --accent: #3b82f6; /* Azul Eléctrico */
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+            --text-urban: #94a3b8;
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --border-focus: rgba(59, 130, 246, 0.3);
             --danger: #ef4444;
         }
 
@@ -21,266 +31,373 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            padding-bottom: 100px; /* Espacio para que el carrito flotante no tape contenido */
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            padding-bottom: 120px;
+            overflow-x: hidden;
         }
 
-        /* Banner de Mesa Única leído por URL */
-        .table-banner {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-gold);
+        /* Navbar Superior con Botón de Regreso */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background-color: rgba(8, 12, 20, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 150;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .btn-back {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:active {
+            transform: scale(0.9);
+            border-color: var(--accent);
+        }
+
+        .nav-title {
             font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .table-banner span {
-            color: var(--accent-gold);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        /* Contenedor del visualizador 3D */
-        .featured-3d {
-            width: 100%;
-            height: 250px;
-            background: radial-gradient(circle, #1e293b 0%, #090d16 100%);
-            position: relative;
+        .nav-title span {
+            color: var(--accent);
         }
+
+        /* Contenedor de Estudio 3D Premium */
+        .studio-3d-container {
+            width: 100%;
+            height: 280px;
+            background: radial-gradient(circle at center, #162235 0%, #080c14 100%);
+            position: relative;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
         model-viewer {
             width: 100%;
             height: 100%;
-        }
-        .badge-3d {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            pointer-events: none;
-            z-index: 10;
+            --poster-color: transparent;
         }
 
-        /* Filtros de Alérgenos */
+        .badge-3d {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(8, 12, 20, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-urban);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        /* Sección de Filtros de Alérgenos Urbanos */
         .filter-section {
-            padding: 20px 15px 10px 15px;
+            padding: 24px 24px 10px 24px;
         }
+
         .filter-section h3 {
-            font-size: 1rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             color: var(--text-muted);
+            margin-bottom: 14px;
         }
+
         .allergen-selectors {
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
-        .allergen-selectors::-webkit-scrollbar { display: none; } /* Ocultar scroll */
-        
+
+        .allergen-selectors::-webkit-scrollbar { display: none; }
+
         .allergen-btn {
-            background: var(--bg-card);
-            border: 1px solid #334155;
-            color: var(--text-light);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-urban);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
+
         .allergen-btn.active {
             border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.08);
             color: #f87171;
         }
 
-        /* Catálogo de productos */
+        /* Catálogo Estilo Minimalista */
         .menu-container {
-            padding: 15px;
+            padding: 16px 24px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
+
         .dish-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid #223147;
-            padding: 15px;
+            background: var(--bg-surface);
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            padding: 16px;
             display: flex;
-            gap: 15px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            gap: 18px;
+            transition: all 0.3s ease;
         }
+
         .dish-card.hidden {
             display: none;
         }
+
         .dish-img {
-            width: 90px;
-            height: 90px;
-            border-radius: 12px;
-            background: #1e293b;
+            width: 95px;
+            height: 95px;
+            border-radius: 16px;
+            background: var(--bg-surface-elevated);
             object-fit: cover;
             flex-shrink: 0;
         }
+
         .dish-info {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
+
         .dish-header h4 {
             font-size: 1.05rem;
+            font-weight: 600;
             margin-bottom: 4px;
+            letter-spacing: -0.3px;
         }
+
         .dish-desc {
             font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.3;
-            margin-bottom: 8px;
+            color: var(--text-urban);
+            line-height: 1.4;
+            margin-bottom: 10px;
         }
+
         .dish-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .dish-price {
             font-weight: 700;
-            color: var(--accent-gold);
-            font-size: 1.1rem;
-        }
-        .add-btn {
-            background: var(--accent-gold);
-            color: #000;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .add-btn:active {
-            transform: scale(0.95);
+            font-size: 1.15rem;
+            letter-spacing: -0.5px;
         }
 
-        /* Barra de Cuenta / Facturación inferior */
+        .add-btn {
+            background: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:active {
+            transform: scale(0.92);
+            background: var(--accent);
+            color: var(--text-main);
+        }
+
+        /* Barra de Facturación Estilo iOS Glassmorphism */
         .cart-bar {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #0f172a;
-            border-top: 1px solid #334155;
-            padding: 15px 20px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 440px;
+            background: rgba(17, 24, 35, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             z-index: 100;
         }
+
         .cart-total p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--text-muted);
+            margin-bottom: 2px;
         }
+
         .cart-total h3 {
-            font-size: 1.3rem;
-            color: var(--text-light);
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
+
         .pay-btn {
-            background: #22c55e;
+            background: var(--accent-gradient);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s;
         }
-        .pay-btn:hover { background: #16a34a; }
 
-        /* Modal de Métodos de Pago Simulados */
+        .pay-btn:active {
+            transform: scale(0.96);
+            box-shadow: none;
+        }
+
+        /* Modal Urbano de Pago Simulado */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(5, 8, 14, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 200;
         }
         .modal.open { opacity: 1; pointer-events: auto; }
+        
         .modal-content {
-            background: var(--bg-card);
-            border: 1px solid #334155;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
             width: 100%;
-            max-width: 400px;
-            border-radius: 24px;
-            padding: 25px;
+            max-width: 380px;
+            border-radius: 28px;
+            padding: 30px 24px;
             text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
-        .modal-content h3 { margin-bottom: 15px; }
+
+        .modal-content h3 { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
         .payment-methods {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin: 20px 0;
+            margin: 24px 0;
         }
+
         .method-card {
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 15px 10px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 18px 12px;
             font-size: 0.8rem;
-            color: var(--text-muted);
+            font-weight: 600;
+            color: var(--text-urban);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
+
         .method-card i {
-            font-size: 1.6rem;
-            margin-bottom: 6px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
             display: block;
         }
-        .method-card:hover {
-            border-color: var(--accent-gold);
-            color: var(--text-light);
-            background: rgba(245, 158, 11, 0.05);
+
+        .method-card:active {
+            border-color: var(--accent);
+            color: var(--text-main);
+            background: rgba(59, 130, 246, 0.05);
+            transform: scale(0.95);
         }
+
         .close-modal {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            margin-top: 15px;
-            font-size: 0.9rem;
-            text-decoration: underline;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="table-banner">
-        <i class="fa-solid fa-qrcode"></i> Menú Digital Auto-Gestionado: <span id="label-mesa">Mesa #--</span>
-    </div>
+    <nav class="navbar">
+        <a href="./index.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <div class="nav-title">TecnoTrade | <span id="label-mesa">Mesa 04</span></div>
+        <div style="width: 40px;"></div> </nav>
 
-    <div class="featured-3d">
-        <span class="badge-3d"><i class="fa-solid fa-cube"></i> Interactúa con el plato 3D</span>
+    <div class="studio-3d-container">
+        <span class="badge-3d"><i class="fa-solid fa-expand"></i> Desliza para rotar plato 3D</span>
         <model-viewer 
             src="./plato.glb" 
             alt="Modelo 3D de Hamburguesa Especial" 
@@ -292,7 +409,7 @@
     </div>
 
     <section class="filter-section">
-        <h3><i class="fa-solid fa-filter"></i> Tus restricciones / alergias:</h3>
+        <h3>Exclusiones alimenticias</h3>
         <div class="allergen-selectors">
             <button class="allergen-btn" onclick="toggleAllergen('gluten', this)">
                 <i class="fa-solid fa-wheat-awn"></i> Sin Gluten
@@ -313,7 +430,7 @@
             <div class="dish-info">
                 <div class="dish-header">
                     <h4>Hamburguesa Monster 3D</h4>
-                    <p class="dish-desc">Carne angus, queso cheddar fundido y aderezo especial de la casa. (Modelo 3D arriba).</p>
+                    <p class="dish-desc">Carne angus, cheddar fundido y aderezo secreto. (Modelo interactivo arriba).</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$12.50</span>
@@ -327,7 +444,7 @@
             <div class="dish-info">
                 <div class="dish-header">
                     <h4>Pizza Vía Argentina</h4>
-                    <p class="dish-desc">Masa delgada artesanal, salsa pomodoro, mozzarella fresca y pepperoni de corte grueso.</p>
+                    <p class="dish-desc">Masa artesanal ultra fina, pomodoro, mozzarella fresca y pepperoni premium.</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$10.00</span>
@@ -341,7 +458,7 @@
             <div class="dish-info">
                 <div class="dish-header">
                     <h4>Cheesecake del Istmo</h4>
-                    <p class="dish-desc">Base crujiente de galleta maría con una crema densa de queso y sirope de frutos del bosque.</p>
+                    <p class="dish-desc">Crema suave de queso horneado sobre base de galleta con sirope de frutos silvestres.</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$6.00</span>
@@ -354,18 +471,18 @@
 
     <div class="cart-bar">
         <div class="cart-total">
-            <p>Subtotal Orden</p>
+            <p>Total Cuenta</p>
             <h3 id="total-view">$0.00</h3>
         </div>
         <button class="pay-btn" onclick="openPaymentModal()">
-            <i class="fa-solid fa-credit-card"></i> Pedir & Pagar
+            Pedir & Pagar <i class="fa-solid fa-arrow-right"></i>
         </button>
     </div>
 
     <div class="modal" id="payment-modal">
         <div class="modal-content">
-            <h3><i class="fa-solid fa-wallet" style="color: var(--accent-gold)"></i> Procesar Pago</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px;">Elige un método financiero integrado para completar la orden:</p>
+            <h3>Confirmar Orden</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Selecciona un método de pago interactivo:</p>
             
             <div class="payment-methods">
                 <div class="method-card" onclick="simulateTransaction('Yappy Comercial')">
@@ -373,32 +490,32 @@
                     Yappy
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Visa / Mastercard')">
-                    <i class="fa-solid fa-cc-visa" style="color: #2563eb;"></i>
+                    <i class="fa-solid fa-cc-visa" style="color: #3b82f6;"></i>
                     Visa / Master
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Tarjeta CLAVE')">
-                    <i class="fa-solid fa-credit-card" style="color: #16a34a;"></i>
+                    <i class="fa-solid fa-credit-card" style="color: #10b981;"></i>
                     Clave Digital
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Efectivo (Llamar Caja)')">
-                    <i class="fa-solid fa-money-bill-wave" style="color: #eab308;"></i>
+                    <i class="fa-solid fa-money-bill-wave" style="color: #f59e0b;"></i>
                     Efectivo
                 </div>
             </div>
 
-            <button class="close-modal" onclick="closePaymentModal()">Volver al menú</button>
+            <button class="close-modal" onclick="closePaymentModal()">Cancelar</button>
         </div>
     </div>
 
     <script>
         let currentTotal = 0;
         let activeAllergens = [];
-        let itemsAgregados = []; // Almacena el conteo simple de ítems para enviar al panel
+        let itemsAgregados = [];
 
-        // Detectar número de mesa por URL al iniciar la página (?mesa=7)
+        // Leer Mesa por URL (?mesa=7)
         const urlParams = new URLSearchParams(window.location.search);
         const numeroMesa = urlParams.get('mesa') || "04";
-        document.getElementById('label-mesa').innerText = `Mesa #${numeroMesa}`;
+        document.getElementById('label-mesa').innerText = `Mesa ${numeroMesa}`;
 
         function addToCart(name, price) {
             currentTotal += price;
@@ -406,7 +523,6 @@
             document.getElementById('total-view').innerText = `$${currentTotal.toFixed(2)}`;
         }
 
-        // Sistema de Filtrado Inteligente Front-End (Alérgenos)
         function toggleAllergen(allergen, button) {
             button.classList.toggle('active');
             
@@ -430,10 +546,7 @@
         }
 
         function openPaymentModal() {
-            if (currentTotal === 0) {
-                alert('Tu orden está vacía. Agrega productos antes de procesar el pago.');
-                return;
-            }
+            if (currentTotal === 0) return;
             document.getElementById('payment-modal').classList.add('open');
         }
 
@@ -441,17 +554,13 @@
             document.getElementById('payment-modal').classList.remove('open');
         }
 
-        // LÓGICA LOGÍSTICA ACTUALIZADA CON LOCALSTORAGE
         function simulateTransaction(method) {
             if (currentTotal === 0) return;
 
-            // 1. Resumir los productos agregados de forma legible
-            // Agrupa y cuenta duplicados para que la comanda sea legible
             const conteoItems = {};
             itemsAgregados.forEach(item => { conteoItems[item] = (conteoItems[item] || 0) + 1; });
             const textoComanda = Object.entries(conteoItems).map(([name, qty]) => `${qty}x ${name}`).join('\n');
 
-            // 2. Estructurar el objeto de la orden que requiere el KDS (Panel de Control)
             const nuevoPedido = {
                 id: "PED-" + Math.floor(Math.random() * 10000),
                 mesa: numeroMesa,
@@ -461,15 +570,12 @@
                 hora: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
-            // 3. Extraer, inyectar y empujar el array en LocalStorage
             let pedidosActivos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
             pedidosActivos.push(nuevoPedido);
             localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidosActivos));
 
-            // 4. Feedback en vivo e interfaz reiniciada
-            alert(`[SIMULACIÓN] Transacción procesada por: ${method}\n\nOrden despachada con éxito al sistema central del restaurante.`);
+            alert(`[DEMO TECNOTRADE]\n\nOrden confirmada vía: ${method}.\nEnviada en tiempo real al panel KDS de cocina.`);
             
-            // Limpieza de datos en pantalla
             currentTotal = 0;
             itemsAgregados = [];
             document.getElementById('total-view').innerText = `$0.00`;
