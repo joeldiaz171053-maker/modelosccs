@@ -3,31 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Digital | TecnoTrade PTY</title>
+    <title>Menú Interactivo | TecnoTrade PTY</title>
     
-    <!-- Fuentes Elegantes y Iconos -->
+    <!-- Fuentes Elegantes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-base: #f7f6f3; /* Fondo idéntico a la imagen */
+            --bg-base: #f7f6f3; 
             --bg-card: #ffffff;
-            --accent-mustard: #f4b626; /* Color de la tarjeta activa en la imagen */
+            --accent-mustard: #f4b626; 
             --text-main: #11141a;
             --text-muted: #8c9199;
             --text-light: #ffffff;
             --border-subtle: rgba(0, 0, 0, 0.05);
             --shadow-soft: 0 10px 30px rgba(160, 155, 145, 0.15);
             --shadow-active: 0 15px 35px rgba(244, 182, 38, 0.35);
+            --spring-transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
@@ -37,331 +36,198 @@
             color: var(--text-main);
             padding-bottom: 140px;
             overflow-x: hidden;
+            position: relative;
         }
+
+        /* FONDO VIVO: Hojas y destellos flotantes (Efecto de Profundidad Psicológica) */
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; opacity: 0.6;
+        }
+        .ambient-element { position: absolute; filter: blur(1px); transition: transform 0.1s ease-out; }
+        .elem-1 { top: 15%; left: -20px; width: 60px; transform: rotate(15deg); }
+        .elem-2 { bottom: 20%; right: -30px; width: 80px; transform: rotate(-45deg); }
 
         /* Navbar */
         .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 24px;
-            background-color: rgba(247, 246, 243, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 150;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 24px; background-color: rgba(247, 246, 243, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 150;
         }
-
         .btn-back {
-            color: var(--text-main);
-            text-decoration: none;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: var(--bg-card);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid var(--border-subtle);
-            transition: transform 0.2s;
+            color: var(--text-main); text-decoration: none;
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: var(--bg-card); box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-subtle); transition: var(--spring-transition);
         }
-        .btn-back:active { transform: scale(0.88); }
+        .btn-back:active { transform: scale(0.85); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; font-style: italic; }
 
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            font-style: italic;
+        /* GAMIFICACIÓN: Medidor de Antojo Dinámico */
+        .antojo-container {
+            margin: 15px 24px 0 24px; padding: 12px 16px;
+            background: var(--bg-card); border-radius: 16px; box-shadow: var(--shadow-soft);
         }
+        .antojo-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; }
+        #antojo-status { color: var(--accent-mustard); transition: all 0.3s; }
+        .antojo-bar-bg { width: 100%; height: 6px; background: #e5e4e0; border-radius: 10px; overflow: hidden; }
+        .antojo-bar-fill { width: 0%; height: 100%; background: var(--accent-mustard); border-radius: 10px; transition: width 0.5s cubic-bezier(0.1, 1, 0.1, 1); }
 
-        /* Títulos e Identidad Original */
-        .hero-banner {
-            padding: 30px 24px 20px 24px;
-            text-align: center;
-        }
+        /* Hero */
+        .hero-banner { padding: 20px 24px; text-align: center; }
+        .hero-banner h1 { font-family: 'Playfair Display', serif; font-size: 2.1rem; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+        .hero-banner p { font-size: 0.85rem; color: var(--text-muted); max-width: 320px; margin: 0 auto; }
 
-        .hero-banner h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.1rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        .hero-banner p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            max-width: 320px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        /* Buscador Inteligente */
-        .search-container {
-            padding: 0 24px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
+        /* Buscador */
+        .search-container { padding: 0 24px; margin-bottom: 24px; position: relative; }
         .search-box {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            padding: 14px 16px 14px 44px;
-            border-radius: 16px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 14px 16px 14px 44px; border-radius: 16px; color: var(--text-main); font-size: 0.9rem; outline: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
-
-        .search-container i.fa-search {
-            position: absolute;
-            left: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
+        .search-container i.fa-search { position: absolute; left: 40px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .search-suggestions {
-            position: absolute;
-            top: 105%; left: 24px;
-            width: calc(100% - 48px);
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            z-index: 120;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            display: none;
-            max-height: 180px;
-            overflow-y: auto;
+            position: absolute; top: 105%; left: 24px; width: calc(100% - 48px);
+            background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px;
+            z-index: 120; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: none; max-height: 180px; overflow-y: auto;
         }
-
-        .suggestion-item {
-            padding: 14px 18px;
-            font-size: 0.85rem;
-            border-bottom: 1px solid var(--border-subtle);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            font-weight: 500;
-        }
+        .suggestion-item { padding: 14px 18px; font-size: 0.85rem; border-bottom: 1px solid var(--border-subtle); cursor: pointer; display: flex; justify-content: space-between; font-weight: 500; }
         .suggestion-item span { color: var(--accent-mustard); font-weight: 700; }
 
-        /* Categorías Actualizadas (Comida, Bebidas, Tragos) */
-        .category-nav {
-            display: flex;
-            gap: 16px;
-            padding: 0 24px 30px 24px;
-            overflow-x: auto;
-        }
+        /* Categorías */
+        .category-nav { display: flex; gap: 16px; padding: 0 24px 25px 24px; overflow-x: auto; }
         .category-nav::-webkit-scrollbar { display: none; }
-
-        .cat-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 6px 2px;
-            cursor: pointer;
-            position: relative;
-            white-space: nowrap;
-        }
+        .cat-btn { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; padding: 6px 2px; cursor: pointer; position: relative; white-space: nowrap; }
         .cat-btn.active { color: var(--text-main); }
-        .cat-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 0; width: 100%; height: 2.5px;
-            background: var(--text-main);
-        }
+        .cat-btn.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2.5px; background: var(--text-main); }
 
-        /* Cuadrícula de Productos Estilo Imagen ($2 \times 2$) */
-        .menu-grid {
-            padding: 20px 24px 0 24px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 45px 16px;
-        }
-
+        /* Cuadrícula $2 \times 2$ */
+        .menu-grid { padding: 20px 24px 0 24px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 45px 16px; }
         .dish-card {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 55px 12px 14px 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s, box-shadow 0.3s;
+            background: var(--bg-card); border-radius: 24px; padding: 55px 12px 14px 12px;
+            display: flex; flex-direction: column; justify-content: space-between; position: relative;
+            box-shadow: var(--shadow-soft); transition: var(--spring-transition);
         }
         .dish-card.hidden { display: none !important; }
-
-        /* Imágenes circulares desbordando hacia arriba */
-        .card-img-wrapper {
-            width: 90px;
-            height: 90px;
-            position: absolute;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 50%;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-
-        .card-img {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .dish-details {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .dish-details h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-
-        .dish-meta {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-
-        .dish-action {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dish-price {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .add-btn {
-            background: var(--accent-mustard);
-            color: var(--text-light);
-            border: none;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            font-size: 0.7rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Estado Activo Copiado Exacto de la Imagen */
-        .dish-card.card-active {
-            background-color: var(--accent-mustard) !important;
-            box-shadow: var(--shadow-active);
-            transform: translateY(-4px);
-        }
-
-        .dish-card.card-active .dish-details h4,
-        .dish-card.card-active .dish-price {
-            color: var(--text-light);
-        }
-
-        .dish-card.card-active .dish-meta {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .dish-card.card-active .add-btn {
-            background: var(--bg-card);
-            color: var(--accent-mustard);
-        }
-
-        /* Carrito de Compras Flotante iOS */
-        .cart-bar {
-            position: fixed;
-            bottom: 24px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 48px); max-width: 400px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            border-radius: 24px;
-            padding: 14px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 15px 35px rgba(140, 135, 125, 0.2);
-            z-index: 100;
-        }
-
-        .cart-total p { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-        .cart-total h3 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); }
+        .card-img-wrapper { width: 90px; height: 90px; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); border-radius: 50%; box-shadow: 0 6px 20px rgba(0,0,0,0.1); z-index: 10; transition: var(--spring-transition); }
+        .card-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        .pay-btn {
-            background: var(--text-main);
-            color: var(--bg-card); border: none;
-            padding: 12px 24px; border-radius: 16px;
-            font-weight: 700; font-size: 0.85rem;
-            cursor: pointer; display: flex; align-items: center; gap: 8px;
+        .dish-details { text-align: center; margin-bottom: 10px; }
+        .dish-details h4 { font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .dish-meta { font-size: 0.65rem; color: var(--text-muted); }
+        .dish-action { display: flex; justify-content: space-between; align-items: center; }
+        .dish-price { font-weight: 700; font-size: 1rem; }
+        
+        .add-btn {
+            background: var(--accent-mustard); color: var(--text-light); border: none;
+            width: 28px; height: 28px; border-radius: 50%; font-size: 0.75rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: var(--spring-transition);
         }
+        .add-btn:active { transform: scale(0.7) rotate(90deg); }
 
-        /* Modales Pasarela */
+        /* Estado Activo / Animación de Selección */
+        .dish-card.card-active { background-color: var(--accent-mustard) !important; box-shadow: var(--shadow-active); transform: translateY(-6px); }
+        .dish-card.card-active .dish-details h4, .dish-card.card-active .dish-price { color: var(--text-light); }
+        .dish-card.card-active .dish-meta { color: rgba(255, 255, 255, 0.8); }
+        .dish-card.card-active .add-btn { background: var(--bg-card); color: var(--accent-mustard); }
+        .dish-card.card-active .card-img-wrapper { transform: translateX(-50%) scale(1.08); }
+
+        /* Carrito Flotante Rebotante */
+        .cart-bar {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); max-width: 400px;
+            background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.04); border-radius: 24px; padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 15px 35px rgba(140, 135, 125, 0.2); z-index: 100;
+            transition: var(--spring-transition);
+        }
+        .cart-bar.bump { transform: translateX(-50%) scale(1.06); background: var(--bg-card); }
+        .cart-total p { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+        .cart-total h3 { font-size: 1.3rem; font-weight: 700; }
+        .pay-btn { background: var(--text-main); color: var(--bg-card); border: none; padding: 12px 24px; border-radius: 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        /* Modales Avanzados */
         .modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(17, 20, 26, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(17, 20, 26, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             display: flex; align-items: center; justify-content: center; padding: 24px;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 200;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 200;
         }
         .modal.open { opacity: 1; pointer-events: auto; }
-        .modal-content {
-            background: var(--bg-card); width: 100%; max-width: 350px;
-            border-radius: 28px; padding: 30px 24px; text-align: center;
-        }
-        .modal-content h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 20px; }
-        .payment-methods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
-        .method-card {
-            background: var(--bg-base); border: 1px solid var(--border-subtle);
-            border-radius: 16px; padding: 16px 10px; font-size: 0.8rem; font-weight: 600;
-            cursor: pointer;
-        }
-        .method-card i { font-size: 1.5rem; margin-bottom: 6px; display: block; color: var(--accent-mustard); }
-        .close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; }
+        .modal-content { background: var(--bg-card); width: 100%; max-width: 360px; border-radius: 28px; padding: 30px 24px; text-align: center; position: relative; }
+        .modal-content h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 12px; }
+        
+        /* Opciones Logísticas */
+        .logistic-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+        .log-btn { background: var(--bg-base); border: 2px solid transparent; border-radius: 16px; padding: 14px 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .log-btn i { display: block; font-size: 1.3rem; margin-bottom: 6px; color: var(--text-muted); }
+        .log-btn.selected { border-color: var(--accent-mustard); background: rgba(244, 182, 38, 0.05); }
+        .log-btn.selected i { color: var(--accent-mustard); }
+
+        /* Inputs dinámicos de PickUp */
+        .pickup-fields { display: none; flex-direction: column; gap: 10px; margin: 14px 0; text-align: left; animation: fadeIn 0.3s ease; }
+        .pickup-fields label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+        .pickup-input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-base); font-size: 0.85rem; outline: none; font-weight: 500; }
+
+        .payment-methods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        .method-card { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 14px 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .method-card i { font-size: 1.4rem; margin-bottom: 4px; display: block; color: var(--accent-mustard); }
+        .action-btn { width: 100%; background: var(--text-main); color: var(--bg-card); border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 10px; }
+        .close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-top: 14px; }
+
+        /* EFECTO TICKET VIPS (PSICOLÓGICO) */
+        .ticket-view { display: none; flex-direction: column; align-items: center; animation: ticketPrint 0.6s cubic-bezier(0.1, 1, 0.1, 1) both; }
+        .ticket-body { background: #fff; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; width: 100%; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; }
+        .ticket-body::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 12px; background: linear-gradient(-45deg, var(--bg-card) 6px, transparent 0), linear-gradient(45deg, var(--bg-card) 6px, transparent 0); background-size: 12px 12px; }
+        .barcode { width: 100%; height: 45px; background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 6px); margin: 15px 0 5px 0; }
+
+        @keyframes ticketPrint { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <!-- Navbar Minimalista -->
+    <!-- Elementos del Fondo Parallax -->
+    <div class="ambient-bg">
+        <img class="ambient-element elem-1" src="https://cdn-icons-png.flaticon.com/512/1041/1041373.png" alt="mint">
+        <img class="ambient-element elem-2" src="https://cdn-icons-png.flaticon.com/512/6866/6866572.png" alt="lemon">
+    </div>
+
+    <!-- Top Bar -->
     <nav class="navbar">
         <a href="./index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i></a>
         <div class="nav-logo">TecnoTrade PTY</div>
         <div style="width: 40px;"></div>
     </nav>
 
-    <!-- Títulos e Identidad de tu Maqueta Original -->
+    <!-- MEDIDOR DE ANTOJO (Gamificación Psicológica) -->
+    <div class="antojo-container">
+        <div class="antojo-header">
+            <span>Tu Medidor de Antojo 🔥</span>
+            <span id="antojo-status">¡Explora el menú! 🍽️</span>
+        </div>
+        <div class="antojo-bar-bg">
+            <div id="antojo-bar" class="antojo-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- Editorial Header -->
     <header class="hero-banner">
         <h1>Tu Nueva Solución<br>Tecnológica</h1>
-        <p>Menús auto-gestionados en tiempo real con simulación API listos para la optimización de tu local.</p>
+        <p>Menús autogestionados de alta velocidad adaptados para la vida nocturna y comercial.</p>
     </header>
 
-    <!-- Buscador Integrado -->
+    <!-- Buscador -->
     <div class="search-container">
         <i class="fa-solid fa-search"></i>
         <input type="text" id="menu-search" class="search-box" placeholder="Buscar hamburguesa, tragos..." oninput="handleSearch()">
         <div id="search-suggestions" class="search-suggestions"></div>
     </div>
 
-    <!-- Filtro de Menú Comercial -->
+    <!-- Categorías -->
     <section class="category-nav">
         <button class="cat-btn active" id="cat-all" onclick="filterCategory('all', this)">Todo el menú</button>
         <button class="cat-btn" onclick="filterCategory('comidas', this)">Comidas rápidas</button>
@@ -369,17 +235,16 @@
         <button class="cat-btn" onclick="filterCategory('tragos', this)">Licores & Tragos</button>
     </section>
 
-    <!-- Cuadrícula con tus Productos Originales ($2 \times 2$) -->
+    <!-- Cuadrícula de Catálogo ($2 \times 2$) -->
     <main class="menu-grid">
         
-        <!-- Producto 1: Tus Hamburguesas -->
         <div class="dish-card" id="card-monster-3d" data-category="comidas" data-name="Hamburguesa Monster 3D">
             <div class="card-img-wrapper">
                 <img class="card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" alt="Burger">
             </div>
             <div class="dish-details">
                 <h4>Hamburguesa Monster 3D</h4>
-                <span class="dish-meta">Carne angus • Queso cheddar</span>
+                <span class="dish-meta">Carne angus • Cheddar</span>
             </div>
             <div class="dish-action">
                 <span class="dish-price">$12.50</span>
@@ -387,14 +252,13 @@
             </div>
         </div>
 
-        <!-- Producto 2: Tus Pizzas -->
         <div class="dish-card" id="card-pizza-via" data-category="comidas" data-name="Pizza Vía Argentina">
             <div class="card-img-wrapper">
                 <img class="card-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300" alt="Pizza">
             </div>
             <div class="dish-details">
                 <h4>Pizza Vía Argentina</h4>
-                <span class="dish-meta">Artesanal • Pepperoni grueso</span>
+                <span class="dish-meta">Artesanal • Pepperoni</span>
             </div>
             <div class="dish-action">
                 <span class="dish-price">$10.00</span>
@@ -402,14 +266,13 @@
             </div>
         </div>
 
-        <!-- Producto 3: Bebidas -->
         <div class="dish-card" id="card-soda" data-category="bebidas" data-name="Soda Artesanal">
             <div class="card-img-wrapper">
                 <img class="card-img" src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300" alt="Soda">
             </div>
             <div class="dish-details">
                 <h4>Soda Artesanal</h4>
-                <span class="dish-meta">Frutos rojos • Carbonatada</span>
+                <span class="dish-meta">Frutos rojos • Gas</span>
             </div>
             <div class="dish-action">
                 <span class="dish-price">$3.50</span>
@@ -417,14 +280,13 @@
             </div>
         </div>
 
-        <!-- Producto 4: Tragos para la zona nocturna -->
         <div class="dish-card" id="card-trago" data-category="tragos" data-name="Cóctel del Istmo">
             <div class="card-img-wrapper">
                 <img class="card-img" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300" alt="Trago">
             </div>
             <div class="dish-details">
                 <h4>Cóctel del Istmo</h4>
-                <span class="dish-meta">Premium • Toque cítrico</span>
+                <span class="dish-meta">Premium • Cítricos</span>
             </div>
             <div class="dish-action">
                 <span class="dish-price">$8.50</span>
@@ -434,24 +296,74 @@
 
     </main>
 
-    <!-- Barra de Cuenta Flotante -->
-    <div class="cart-bar">
+    <!-- Carrito iOS -->
+    <div class="cart-bar" id="cart-container">
         <div class="cart-total">
-            <p>Subtotal Orden</p>
+            <p>Subtotal Cuenta</p>
             <h3 id="total-view">$0.00</h3>
         </div>
         <button class="pay-btn" onclick="openPaymentModal()">Pedir Cuenta <i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
-    <!-- Modal Pasarela -->
+    <!-- MODAL LOGÍSTICO Y PASARELA COMPLETA -->
     <div class="modal" id="payment-modal">
-        <div class="modal-content">
-            <h3>Procesar Transacción</h3>
-            <div class="payment-methods">
-                <div class="method-card" onclick="simulateTransaction('Yappy')"><i class="fa-solid fa-mobile-screen"></i>Yappy</div>
-                <div class="method-card" onclick="simulateTransaction('Visa')"><i class="fa-solid fa-credit-card"></i>Tarjeta</div>
+        <div class="modal-content" id="modal-box">
+            
+            <!-- Vista 1: Selección de Tipo de Entrega -->
+            <div id="step-logistics">
+                <h3>¿Cómo deseas tu orden?</h3>
+                <div class="logistic-options">
+                    <div class="log-btn selected" id="opt-dinein" onclick="setLogistics('dinein')">
+                        <i class="fa-solid fa-utensils"></i> Comer aquí
+                    </div>
+                    <div class="log-btn" id="opt-pickup" onclick="setLogistics('pickup')">
+                        <i class="fa-solid fa-bag-shopping"></i> Para retirar
+                    </div>
+                </div>
+
+                <!-- Campos dinámicos si es PickUp -->
+                <div class="pickup-fields" id="pickup-form">
+                    <label>Tu Nombre para el pedido</label>
+                    <input type="text" id="client-name" class="pickup-input" placeholder="Ej. Joel">
+                    <label>Hora de recogida sugerida</label>
+                    <input type="time" id="pickup-time" class="pickup-input" value="20:30">
+                </div>
+
+                <button class="action-btn" onclick="goToPaymentStep()">Continuar al Pago</button>
+                <br>
+                <button class="close-modal" onclick="closePaymentModal()">Regresar</button>
             </div>
-            <button class="close-modal" onclick="closePaymentModal()">Cancelar</button>
+
+            <!-- Vista 2: Métodos de Pago Simulado -->
+            <div id="step-payment" style="display: none;">
+                <h3>Selecciona tu método</h3>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">La transacción es simulada para demostración.</p>
+                <div class="payment-methods">
+                    <div class="method-card" onclick="processOrder('Yappy')"><i class="fa-solid fa-mobile-screen"></i>Yappy</div>
+                    <div class="method-card" onclick="processOrder('Visa')"><i class="fa-solid fa-cc-visa"></i>Tarjeta</div>
+                </div>
+                <button class="close-modal" onclick="backToLogisticsStep()">Atrás</button>
+            </div>
+
+            <!-- Vista 3: Ticket VIP de Satisfacción Psicológica -->
+            <div id="step-ticket" class="ticket-view">
+                <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 2.5rem; margin-bottom: 10px;"></i>
+                <h3 style="margin-bottom: 5px;">¡Orden Despachada!</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Muestra este pase en el establecimiento.</p>
+                
+                <div class="ticket-body">
+                    <h4 style="font-family: monospace; font-size: 0.9rem;" id="t-id">ID: PED-0000</h4>
+                    <p style="font-size: 0.75rem; margin-top: 5px;" id="t-type">Tipo: Comer aquí</p>
+                    <p style="font-size: 0.75rem;" id="t-meta">Ubicación: Mesa 04</p>
+                    <hr style="border: none; border-top: 1px dashed #ddd; margin: 10px 0;">
+                    <p style="font-size: 0.75rem; font-weight: 700;" id="t-items"></p>
+                    <h4 style="margin-top: 10px; font-size: 1.1rem;" id="t-total">Total: $0.00</h4>
+                    <div class="barcode"></div>
+                </div>
+
+                <button class="action-btn" style="background: var(--accent-mustard);" onclick="resetEverything()">Entendido</button>
+            </div>
+
         </div>
     </div>
 
@@ -459,44 +371,143 @@
         let currentTotal = 0;
         let itemsAgregados = [];
         let currentCategory = 'all';
+        let logisticType = 'dinein'; // Predeterminado
 
-        // Captura e inyección de la mesa por URL (?mesa=04)
         const urlParams = new URLSearchParams(window.location.search);
         const numeroMesa = urlParams.get('mesa') || "04";
 
         const productosData = [
-            { id: 'card-monster-3d', name: 'Hamburguesa Monster 3D', price: '$12.50' },
-            { id: 'card-pizza-via', name: 'Pizza Vía Argentina', price: '$10.00' },
-            { id: 'card-soda', name: 'Soda Artesanal', price: '$3.50' },
-            { id: 'card-trago', name: 'Cóctel del Istmo', price: '$8.50' }
+            { id: 'card-monster-3d', name: 'Hamburguesa Monster 3D', price: 12.50 },
+            { id: 'card-pizza-via', name: 'Pizza Vía Argentina', price: 10.00 },
+            { id: 'card-soda', name: 'Soda Artesanal', price: 3.50 },
+            { id: 'card-trago', name: 'Cóctel del Istmo', price: 8.50 }
         ];
+
+        /* EFECTO PARALLAX DE FONDO AL HACER SCROLL */
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelector('.elem-1').style.transform = `translateY(${scrolled * 0.15}px) rotate(${15 + scrolled * 0.05}deg)`;
+            document.querySelector('.elem-2').style.transform = `translateY(${scrolled * -0.1}px) rotate(${-45 + scrolled * 0.03}deg)`;
+        });
 
         function addToCart(name, price) {
             currentTotal += price;
             itemsAgregados.push(name);
             document.getElementById('total-view').innerText = `$${currentTotal.toFixed(2)}`;
+
+            // ANIMACIÓN DE REBOTE EN EL CARRITO
+            const cart = document.getElementById('cart-container');
+            cart.classList.add('bump');
+            setTimeout(() => cart.classList.remove('bump'), 400);
+
+            // ACTUALIZACIÓN DEL MEDIDOR DE ANTOJO PSICOLÓGICO
+            updateAntojoMeter();
         }
 
-        /* BUSCADOR CON RESALTADO ESTILO IMAGEN */
+        function updateAntojoMeter() {
+            const bar = document.getElementById('antojo-bar');
+            const status = document.getElementById('antojo-status');
+            
+            let percentage = (currentTotal / 30) * 100; // Meta de consumo sutil $30
+            if (percentage > 100) percentage = 100;
+            bar.style.width = `${percentage}%`;
+
+            if (currentTotal === 0) { status.innerText = "¡Explora el menú! 🍽️"; }
+            else if (currentTotal < 10) { status.innerText = "Buen comienzo... 🍔"; }
+            else if (currentTotal < 22) { status.innerText = "¡Combo Excelente! 🥤"; }
+            else { status.innerText = "¡Nivel Antojo Leyenda! 🍹🔥"; }
+        }
+
+        /* LOGÍSTICA DE MODALES */
+        function setLogistics(type) {
+            logisticType = type;
+            document.getElementById('opt-dinein').classList.remove('selected');
+            document.getElementById('opt-pickup').classList.remove('selected');
+            document.getElementById(`opt-${type}`).classList.add('selected');
+
+            const form = document.getElementById('pickup-form');
+            if (type === 'pickup') { form.style.display = 'flex'; } 
+            else { form.style.display = 'none'; }
+        }
+
+        function goToPaymentStep() {
+            if (logisticType === 'pickup' && !document.getElementById('client-name').value.trim()) {
+                alert("Por favor ingresa tu nombre para retirar el pedido.");
+                return;
+            }
+            document.getElementById('step-logistics').style.display = 'none';
+            document.getElementById('step-payment').style.display = 'block';
+        }
+
+        function backToLogisticsStep() {
+            document.getElementById('step-payment').style.display = 'none';
+            document.getElementById('step-logistics').style.display = 'block';
+        }
+
+        /* PROCESAMIENTO COMPATIBLE CON TU PANEL DE CONTROL HTML */
+        function processOrder(method) {
+            const conteo = {};
+            itemsAgregados.forEach(item => { conteo[item] = (conteo[item] || 0) + 1; });
+            const textoComanda = Object.entries(conteo).map(([n, q]) => `${q}x ${n}`).join('\n');
+            
+            const pedID = "PED-" + Math.floor(1000 + Math.random() * 9000);
+            const horaActual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            // Adaptación de los datos logísticos para que la cocina lo lea de forma elegante
+            let destinoFinal = `Mesa ${numeroMesa}`;
+            if (logisticType === 'pickup') {
+                const nombre = document.getElementById('client-name').value.trim();
+                const horaRetiro = document.getElementById('pickup-time').value;
+                destinoFinal = `PICK-UP (${nombre} - ${horaRetiro})`;
+            }
+
+            const nuevoPedido = {
+                id: pedID,
+                mesa: destinoFinal, // Mantiene la consistencia de lectura de tu panel
+                items: textoComanda,
+                total: currentTotal.toFixed(2),
+                metodo: method,
+                hora: horaActual
+            };
+
+            let pedidosActivos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+            pedidosActivos.push(nuevoPedido);
+            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidosActivos));
+
+            // TRANSMUTACIÓN AL TICKET VIP DE SATISFACCIÓN
+            document.getElementById('t-id').innerText = `ID: ${pedID}`;
+            document.getElementById('t-type').innerText = `Método de Pago: ${method}`;
+            document.getElementById('t-meta').innerText = `Entrega: ${destinoFinal}`;
+            document.getElementById('t-items').innerText = textoComanda.replace(/\n/g, ' | ');
+            document.getElementById('t-total').innerText = `Total: $${currentTotal.toFixed(2)}`;
+
+            document.getElementById('step-payment').style.display = 'none';
+            document.getElementById('step-ticket').style.display = 'flex';
+        }
+
+        function resetEverything() {
+            currentTotal = 0; itemsAgregados = [];
+            document.getElementById('total-view').innerText = `$0.00`;
+            document.getElementById('client-name').value = '';
+            updateAntojoMeter();
+            closePaymentModal();
+            // Resetear vistas del modal para el próximo click
+            document.getElementById('step-ticket').style.display = 'none';
+            document.getElementById('step-logistics').style.display = 'block';
+            setLogistics('dinein');
+        }
+
+        /* BUSCADOR Y FILTROS */
         function handleSearch() {
             const query = document.getElementById('menu-search').value.toLowerCase().trim();
             const suggestionsBox = document.getElementById('search-suggestions');
-            
-            if (!query) {
-                suggestionsBox.style.display = 'none';
-                return;
-            }
+            if (!query) { suggestionsBox.style.display = 'none'; return; }
 
             const filtrados = productosData.filter(p => p.name.toLowerCase().includes(query));
-
             if (filtrados.length === 0) {
-                suggestionsBox.innerHTML = `<div class="suggestion-item">No hay coincidencias</div>`;
+                suggestionsBox.innerHTML = `<div class="suggestion-item">Sin coincidencias</div>`;
             } else {
-                suggestionsBox.innerHTML = filtrados.map(p => `
-                    <div class="suggestion-item" onclick="selectProduct('${p.id}')">
-                        ${p.name} <span>${p.price}</span>
-                    </div>
-                `).join('');
+                suggestionsBox.innerHTML = filtrados.map(p => `<div class="suggestion-item" onclick="selectProduct('${p.id}')">${p.name} <span>$${p.price.toFixed(2)}</span></div>`).join('');
             }
             suggestionsBox.style.display = 'block';
         }
@@ -504,74 +515,33 @@
         function selectProduct(id) {
             document.getElementById('search-suggestions').style.display = 'none';
             document.getElementById('menu-search').value = '';
-
             filterCategory('all', document.getElementById('cat-all'));
 
-            const targetCard = document.getElementById(id);
-            if (targetCard) {
-                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                targetCard.classList.add('card-active');
-                
-                setTimeout(() => {
-                    targetCard.classList.remove('card-active');
-                }, 2200);
+            const card = document.getElementById(id);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.add('card-active');
+                setTimeout(() => card.classList.remove('card-active'), 2200);
             }
         }
 
-        /* FILTRADO POR CATEGORÍAS */
         function filterCategory(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const cards = document.querySelectorAll('.dish-card');
-            cards.forEach(card => {
+            document.querySelectorAll('.dish-card').forEach(card => {
                 const cardCat = card.getAttribute('data-category');
-                if (currentCategory === 'all' || cardCat === currentCategory) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                if (currentCategory === 'all' || cardCat === currentCategory) { card.classList.remove('hidden'); } 
+                else { card.classList.add('hidden'); }
             });
         }
 
         function openPaymentModal() { if (currentTotal > 0) document.getElementById('payment-modal').classList.add('open'); }
         function closePaymentModal() { document.getElementById('payment-modal').classList.remove('open'); }
 
-        /* PUENTE CONECTADO AL PANEL DE CONTROL LOCAL (CON CORRECCIÓN DE DATOS) */
-        function simulateTransaction(method) {
-            if (currentTotal === 0) return;
-
-            // Procesamos el conteo de los ítems de forma idéntica a lo esperado por panel-control.html
-            const conteoItems = {};
-            itemsAgregados.forEach(item => { conteoItems[item] = (conteoItems[item] || 0) + 1; });
-            const textoComanda = Object.entries(conteoItems).map(([name, qty]) => `${qty}x ${name}`).join('\n');
-
-            const nuevoPedido = {
-                id: "PED-" + Math.floor(Math.random() * 10000),
-                mesa: numeroMesa,
-                items: textoComanda, // Esto es lo que lee el panel de control
-                total: currentTotal.toFixed(2),
-                metodo: method,
-                hora: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            };
-
-            let pedidosActivos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
-            pedidosActivos.push(nuevoPedido);
-            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidosActivos));
-
-            alert(`[SIMULACIÓN API]\n\nOrden despachada con éxito mediante ${method} al panel KDS.`);
-            
-            currentTotal = 0;
-            itemsAgregados = [];
-            document.getElementById('total-view').innerText = `$0.00`;
-            closePaymentModal();
-        }
-
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                document.getElementById('search-suggestions').style.display = 'none';
-            }
+            if (!e.target.closest('.search-container')) document.getElementById('search-suggestions').style.display = 'none';
         });
     </script>
 </body>
