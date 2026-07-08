@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Interactivo - Mesa 04</title>
-    <!-- FontAwesome para iconos -->
+    <title>Menú Interactivo - TecnoTrade PTY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Librería para Renderizado 3D de Google -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
     
     <style>
@@ -30,10 +28,10 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-light);
-            padding-bottom: 100px; /* Espacio para el carrito flotante */
+            padding-bottom: 100px; /* Espacio para que el carrito flotante no tape contenido */
         }
 
-        /* Banner de Mesa Única */
+        /* Banner de Mesa Única leído por URL */
         .table-banner {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             padding: 15px;
@@ -46,7 +44,7 @@
             color: var(--accent-gold);
         }
 
-        /* Contenedor 3D Destacado */
+        /* Contenedor del visualizador 3D */
         .featured-3d {
             width: 100%;
             height: 250px;
@@ -68,6 +66,7 @@
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
             pointer-events: none;
+            z-index: 10;
         }
 
         /* Filtros de Alérgenos */
@@ -85,8 +84,7 @@
             overflow-x: auto;
             padding-bottom: 10px;
         }
-        /* Ocultar barra de scroll en móviles */
-        .allergen-selectors::-webkit-scrollbar { display: none; }
+        .allergen-selectors::-webkit-scrollbar { display: none; } /* Ocultar scroll */
         
         .allergen-btn {
             background: var(--bg-card);
@@ -108,7 +106,7 @@
             color: #f87171;
         }
 
-        /* Lista de Platos */
+        /* Catálogo de productos */
         .menu-container {
             padding: 15px;
             display: flex;
@@ -170,9 +168,13 @@
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .add-btn:active {
+            transform: scale(0.95);
         }
 
-        /* Carrito / Facturación Flotante */
+        /* Barra de Cuenta / Facturación inferior */
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -207,9 +209,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: background 0.2s;
         }
+        .pay-btn:hover { background: #16a34a; }
 
-        /* Modal de Pago Simulado */
+        /* Modal de Métodos de Pago Simulados */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -256,6 +260,7 @@
         .method-card:hover {
             border-color: var(--accent-gold);
             color: var(--text-light);
+            background: rgba(245, 158, 11, 0.05);
         }
         .close-modal {
             background: transparent;
@@ -270,15 +275,12 @@
 </head>
 <body>
 
-    <!-- Identificador de Mesa por QR -->
     <div class="table-banner">
-        <i class="fa-solid fa-qrcode"></i> Pedido Digital Autenticado: <span>Mesa #04</span>
+        <i class="fa-solid fa-qrcode"></i> Menú Digital Auto-Gestionado: <span id="label-mesa">Mesa #--</span>
     </div>
 
-    <!-- Sección de Vista 3D del Plato del Día -->
     <div class="featured-3d">
-        <span class="badge-3d"><i class="fa-solid fa-cube"></i> Toca para rotar plato 3D</span>
-        <!-- Aquí vinculas tu archivo .glb en el atributo src -->
+        <span class="badge-3d"><i class="fa-solid fa-cube"></i> Interactúa con el plato 3D</span>
         <model-viewer 
             src="./plato.glb" 
             alt="Modelo 3D de Hamburguesa Especial" 
@@ -289,9 +291,8 @@
         </model-viewer>
     </div>
 
-    <!-- Selector de Filtros de Alérgenos -->
     <section class="filter-section">
-        <h3><i class="fa-solid fa-filter"></i> Filtrar exclusiones (Tus Alergias):</h3>
+        <h3><i class="fa-solid fa-filter"></i> Tus restricciones / alergias:</h3>
         <div class="allergen-selectors">
             <button class="allergen-btn" onclick="toggleAllergen('gluten', this)">
                 <i class="fa-solid fa-wheat-awn"></i> Sin Gluten
@@ -305,72 +306,66 @@
         </div>
     </section>
 
-    <!-- Catálogo de Platos -->
     <main class="menu-container">
         
-        <!-- Plato 1 -->
-        <div class="dish-card" data-allergens="">
-            <img class="dish-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" alt="Hamburguesa Tech">
+        <div class="dish-card" data-allergens="" data-name="Hamburguesa Monster 3D">
+            <img class="dish-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200" alt="Hamburguesa">
             <div class="dish-info">
                 <div class="dish-header">
                     <h4>Hamburguesa Monster 3D</h4>
-                    <p class="dish-desc">Carne angus, queso cheddar fundido y salsa de la casa. (Modelo interactivo arriba).</p>
+                    <p class="dish-desc">Carne angus, queso cheddar fundido y aderezo especial de la casa. (Modelo 3D arriba).</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$12.50</span>
-                    <button class="add-btn" onclick="addToCart(12.50)">Agregar</button>
+                    <button class="add-btn" onclick="addToCart('Hamburguesa Monster 3D', 12.50)">Agregar</button>
                 </div>
             </div>
         </div>
 
-        <!-- Plato 2 (Tiene Gluten) -->
-        <div class="dish-card" data-allergens="gluten">
+        <div class="dish-card" data-allergens="gluten" data-name="Pizza Vía Argentina">
             <img class="dish-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200" alt="Pizza">
             <div class="dish-info">
                 <div class="dish-header">
                     <h4>Pizza Vía Argentina</h4>
-                    <p class="dish-desc">Masa artesanal, mozzarella fresca, pepperoni y albahaca salvaje.</p>
+                    <p class="dish-desc">Masa delgada artesanal, salsa pomodoro, mozzarella fresca y pepperoni de corte grueso.</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$10.00</span>
-                    <button class="add-btn" onclick="addToCart(10.00)">Agregar</button>
+                    <button class="add-btn" onclick="addToCart('Pizza Vía Argentina', 10.00)">Agregar</button>
                 </div>
             </div>
         </div>
 
-        <!-- Plato 3 (Tiene Lacteos) -->
-        <div class="dish-card" data-allergens="lacteos">
+        <div class="dish-card" data-allergens="lacteos" data-name="Cheesecake del Istmo">
             <img class="dish-img" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200" alt="Postre">
             <div class="dish-info">
                 <div class="dish-header">
-                    <h4>Cheesecake de la Casa</h4>
-                    <p class="dish-desc">Crema de queso premium con sirope artesanal de frutos rojos de Chiriquí.</p>
+                    <h4>Cheesecake del Istmo</h4>
+                    <p class="dish-desc">Base crujiente de galleta maría con una crema densa de queso y sirope de frutos del bosque.</p>
                 </div>
                 <div class="dish-meta">
                     <span class="dish-price">$6.00</span>
-                    <button class="add-btn" onclick="addToCart(6.00)">Agregar</button>
+                    <button class="add-btn" onclick="addToCart('Cheesecake del Istmo', 6.00)">Agregar</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Barra Inferior de Facturación / Carrito -->
     <div class="cart-bar">
         <div class="cart-total">
-            <p>Subtotal Cuenta</p>
+            <p>Subtotal Orden</p>
             <h3 id="total-view">$0.00</h3>
         </div>
         <button class="pay-btn" onclick="openPaymentModal()">
-            <i class="fa-solid fa-credit-card"></i> Pagar Cuenta
+            <i class="fa-solid fa-credit-card"></i> Pedir & Pagar
         </button>
     </div>
 
-    <!-- Modal de Facturación Falsa / Simulación de Pasarela -->
     <div class="modal" id="payment-modal">
         <div class="modal-content">
-            <h3><i class="fa-solid fa-wallet" style="color: var(--accent-gold)"></i> Facturación de Mesa</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Selecciona tu método de pago integrado para simular la transacción:</p>
+            <h3><i class="fa-solid fa-wallet" style="color: var(--accent-gold)"></i> Procesar Pago</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px;">Elige un método financiero integrado para completar la orden:</p>
             
             <div class="payment-methods">
                 <div class="method-card" onclick="simulateTransaction('Yappy Comercial')">
@@ -379,11 +374,11 @@
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Visa / Mastercard')">
                     <i class="fa-solid fa-cc-visa" style="color: #2563eb;"></i>
-                    Visa/Master
+                    Visa / Master
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Tarjeta CLAVE')">
                     <i class="fa-solid fa-credit-card" style="color: #16a34a;"></i>
-                    Clave en Línea
+                    Clave Digital
                 </div>
                 <div class="method-card" onclick="simulateTransaction('Efectivo (Llamar Caja)')">
                     <i class="fa-solid fa-money-bill-wave" style="color: #eab308;"></i>
@@ -391,20 +386,27 @@
                 </div>
             </div>
 
-            <button class="close-modal" onclick="closePaymentModal()">Regresar al menú</button>
+            <button class="close-modal" onclick="closePaymentModal()">Volver al menú</button>
         </div>
     </div>
 
     <script>
         let currentTotal = 0;
         let activeAllergens = [];
+        let itemsAgregados = []; // Almacena el conteo simple de ítems para enviar al panel
 
-        function addToCart(price) {
+        // Detectar número de mesa por URL al iniciar la página (?mesa=7)
+        const urlParams = new URLSearchParams(window.location.search);
+        const numeroMesa = urlParams.get('mesa') || "04";
+        document.getElementById('label-mesa').innerText = `Mesa #${numeroMesa}`;
+
+        function addToCart(name, price) {
             currentTotal += price;
+            itemsAgregados.push(name);
             document.getElementById('total-view').innerText = `$${currentTotal.toFixed(2)}`;
         }
 
-        // Lógica Interactiva del Filtro de Alérgenos
+        // Sistema de Filtrado Inteligente Front-End (Alérgenos)
         function toggleAllergen(allergen, button) {
             button.classList.toggle('active');
             
@@ -414,12 +416,9 @@
                 activeAllergens.push(allergen);
             }
 
-            // Filtrar las tarjetas del menú en tiempo real
             const cards = document.querySelectorAll('.dish-card');
             cards.forEach(card => {
                 const cardAllergens = card.getAttribute('data-allergens').split(',').filter(Boolean);
-                
-                // Si el plato contiene alguno de los alérgenos que el usuario quiere EVITAR, lo oculta
                 const hasConflict = activeAllergens.some(allergen => cardAllergens.includes(allergen));
                 
                 if (hasConflict) {
@@ -430,10 +429,9 @@
             });
         }
 
-        // Funciones del Modal de Facturación
         function openPaymentModal() {
-            if(currentTotal === 0) {
-                alert('Por favor, agrega algún plato al menú antes de proceder al pago.');
+            if (currentTotal === 0) {
+                alert('Tu orden está vacía. Agrega productos antes de procesar el pago.');
                 return;
             }
             document.getElementById('payment-modal').classList.add('open');
@@ -443,9 +441,37 @@
             document.getElementById('payment-modal').classList.remove('open');
         }
 
+        // LÓGICA LOGÍSTICA ACTUALIZADA CON LOCALSTORAGE
         function simulateTransaction(method) {
-            alert(`[SIMULACIÓN API] PROCESANDO TRANSACCIÓN\n\nMétodo: ${method}\nMesa: #04\nTotal a transferir: $${currentTotal.toFixed(2)}\n\nResultado: Transacción aprobada con éxito. Notificación enviada al POS de la caja.`);
+            if (currentTotal === 0) return;
+
+            // 1. Resumir los productos agregados de forma legible
+            // Agrupa y cuenta duplicados para que la comanda sea legible
+            const conteoItems = {};
+            itemsAgregados.forEach(item => { conteoItems[item] = (conteoItems[item] || 0) + 1; });
+            const textoComanda = Object.entries(conteoItems).map(([name, qty]) => `${qty}x ${name}`).join('\n');
+
+            // 2. Estructurar el objeto de la orden que requiere el KDS (Panel de Control)
+            const nuevoPedido = {
+                id: "PED-" + Math.floor(Math.random() * 10000),
+                mesa: numeroMesa,
+                items: textoComanda,
+                total: currentTotal.toFixed(2),
+                metodo: method,
+                hora: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            // 3. Extraer, inyectar y empujar el array en LocalStorage
+            let pedidosActivos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+            pedidosActivos.push(nuevoPedido);
+            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidosActivos));
+
+            // 4. Feedback en vivo e interfaz reiniciada
+            alert(`[SIMULACIÓN] Transacción procesada por: ${method}\n\nOrden despachada con éxito al sistema central del restaurante.`);
+            
+            // Limpieza de datos en pantalla
             currentTotal = 0;
+            itemsAgregados = [];
             document.getElementById('total-view').innerText = `$0.00`;
             closePaymentModal();
         }
