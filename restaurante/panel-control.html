@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecnoTrade KDS - Panel de Cocina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --bg-panel: #111827;
+            --bg-card: #1f2937;
+            --border: #374151;
+            --accent-green: #10b981;
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Encabezado del Panel */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 span {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--accent-green);
+        }
+
+        .status-hub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Cuadrícula de Comandas */
+        .grid-comandas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            align-content: flex-start;
+        }
+
+        /* Tarjeta de Comanda */
+        .comanda-card {
+            background-color: var(--bg-panel);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .comanda-header {
+            background-color: #1e293b;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comanda-header h3 {
+            font-size: 1.1rem;
+            color: #fbbf24;
+        }
+
+        .comanda-header .time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .comanda-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .comanda-body .items {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
+
+        .comanda-footer {
+            padding: 10px 15px;
+            background-color: rgba(0,0,0,0.2);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-despachar {
+            width: 100%;
+            background-color: var(--accent-green);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-despachar:hover {
+            background-color: #059669;
+        }
+
+        /* Vista cuando no hay pedidos */
+        .no-orders {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-orders i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            color: var(--border);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-desktop" style="color: var(--accent-green)"></i> Pantalla de Cocina (KDS) <span>Simulador Local</span></h1>
+        <div class="status-hub">
+            <i class="fa-solid fa-circle" style="color: var(--accent-green); font-size: 0.7rem;"></i> Sistema en Línea
+        </div>
+    </header>
+
+    <main class="grid-comandas" id="contenedor-comandas">
+        </main>
+
+    <script>
+        // Función para cargar y pintar los pedidos desde el LocalStorage
+        function cargarPedidos() {
+            const contenedor = document.getElementById('contenedor-comandas');
+            const pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+
+            // Limpiar contenedor
+            contenedor.innerHTML = '';
+
+            if (pedidos.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>No hay órdenes pendientes en este momento.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Pintar cada pedido en pantalla
+            pedidos.forEach(pedido => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'comanda-card';
+                tarjeta.innerHTML = `
+                    <div class="comanda-header">
+                        <h3>Mesa #${pedido.mesa}</h3>
+                        <span class="time">${pedido.hora}</span>
+                    </div>
+                    <div class="comanda-body">
+                        <div class="items">${pedido.items}</div>
+                    </div>
+                    <div class="comanda-footer">
+                        <span>Pago: ${pedido.metodo}</span>
+                        <strong>$${pedido.total}</strong>
+                    </div>
+                    <button class="btn-despachar" onclick="despacharPedido('${pedido.id}')">
+                        <i class="fa-solid fa-check"></i> Marcar Listo / Despachar
+                    </button>
+                `;
+                contenedor.appendChild(tarjeta);
+            });
+        }
+
+        // Función para eliminar un pedido (Despachar)
+        function despacharPedido(id) {
+            let pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+            // Filtrar para quitar el pedido seleccionado
+            pedidos = pedidos.filter(p => p.id !== id);
+            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidos));
+            
+            // Recargar la pantalla
+            cargarPedidos();
+        }
+
+        // ESCUCHA MÁGICA: Detectar cambios desde la otra pestaña del menú en tiempo real
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'pedidos_restaurante') {
+                cargarPedidos();
+                // Reproducir un sonido de alerta nativo del navegador
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Nota LA
+                    oscillator.connect(audioCtx.destination);
+                    oscillator.start();
+                    oscillator.stop(audioCtx.currentTime + 0.15); // Duración 150ms
+                } catch(err) { console.log("Audio no permitido aún por interacción"); }
+            }
+        });
+
+        // Cargar por primera vez al abrir la página
+        window.onload = cargarPedidos;
+    </script>
+</body>
+</html>
