@@ -3,251 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TecnoTrade KDS - Panel de Cocina</title>
+    <title>Panel de Control KDS | TecnoTrade PTY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --bg-dark: #0b0f19;
-            --bg-panel: #111827;
-            --bg-card: #1f2937;
-            --border: #374151;
+            --bg-base: #f4f3ef; 
+            --bg-dark-accent: #11141a; 
+            --bg-card: #ffffff;
+            --accent-mustard: #f4b626; 
+            --accent-orange: #f97316;
             --accent-green: #10b981;
-            --text-light: #f3f4f6;
-            --text-muted: #9ca3af;
+            --text-main: #11141a;
+            --text-muted: #8c9199;
+            --text-light: #ffffff;
+            --border-subtle: rgba(0, 0, 0, 0.05);
+            --shadow-soft: 0 12px 35px rgba(150, 145, 135, 0.1);
+            --spring-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        /* Encabezado Estilo Superior Orgánico */
+        .kds-header {
+            background-color: var(--bg-dark-accent);
+            padding: 30px 24px;
+            text-align: center;
             color: var(--text-light);
-            padding: 20px;
-            height: 100vh;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .kds-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .kds-header h1 span {
+            font-style: italic;
+            color: var(--accent-mustard);
+        }
+        .kds-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Contadores de Estado Rápidos */
+        .kds-summary {
             display: flex;
-            flex-direction: column;
-        }
-
-        /* Encabezado del Panel */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        header h1 span {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-            font-size: 0.75rem;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid var(--accent-green);
-        }
-
-        .status-hub {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* Cuadrícula de Comandas */
-        .grid-comandas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            justify-content: center;
             gap: 20px;
-            overflow-y: auto;
-            flex-grow: 1;
-            align-content: flex-start;
+            margin: -20px auto 30px auto;
+            position: relative;
+            z-index: 10;
+            max-width: 600px;
+            padding: 0 24px;
+        }
+        .summary-badge {
+            background: var(--bg-card);
+            padding: 10px 18px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+            flex: 1;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid var(--border-subtle);
+        }
+        .summary-badge span {
+            display: block;
+            font-size: 1.4rem;
+            color: var(--bg-dark-accent);
+            margin-top: 2px;
         }
 
-        /* Tarjeta de Comanda */
-        .comanda-card {
-            background-color: var(--bg-panel);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
+        /* Contenedor Grid Adaptable para Tabletas o Celulares */
+        .matrix-container {
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Tarjeta de Pedido Avanzada (KDS Ticket) */
+        .order-ticket {
+            background: var(--bg-card);
+            border-radius: 22px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid transparent;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            animation: fadeIn 0.3s ease;
+            justify-content: space-between;
+            position: relative;
+            transition: var(--spring-transition);
+            animation: cardEnter 0.4s ease-out both;
+            overflow: hidden;
         }
 
-        .comanda-header {
-            background-color: #1e293b;
-            padding: 12px 15px;
+        /* Estado 1: Recién entrado / En espera */
+        .status-espera {
+            border-color: #cbd5e1;
+        }
+        .status-espera .status-indicator {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        /* Estado 2: Marcado como Pendiente (En cocina) */
+        .status-pendiente {
+            border-color: var(--accent-mustard);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(244, 182, 38, 0.15);
+        }
+        .status-pendiente .status-indicator {
+            background: rgba(244, 182, 38, 0.15);
+            color: #d97706;
+            animation: pulseGlow 2s infinite;
+        }
+        .status-pendiente .btn-action-kds {
+            background: var(--accent-orange) !important;
+        }
+
+        /* Componentes Internos del Ticket */
+        .ticket-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+            margin-bottom: 14px;
+            border-bottom: 1px dashed var(--border-subtle);
+            padding-bottom: 10px;
         }
-
-        .comanda-header h3 {
+        .ticket-id {
+            font-family: monospace;
+            font-weight: 800;
             font-size: 1.1rem;
-            color: #fbbf24;
+            color: var(--bg-dark-accent);
         }
-
-        .comanda-header .time {
-            font-size: 0.8rem;
+        .ticket-time {
+            font-size: 0.75rem;
             color: var(--text-muted);
+            font-weight: 600;
+        }
+        .ticket-location {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--bg-dark-accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .comanda-body {
-            padding: 15px;
+        .ticket-items {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2d3748;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            white-space: pre-line; /* Mantiene saltos de línea limpios */
             flex-grow: 1;
         }
 
-        .comanda-body .items {
-            font-size: 0.95rem;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            white-space: pre-line;
-        }
-
-        .comanda-footer {
-            padding: 10px 15px;
-            background-color: rgba(0,0,0,0.2);
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .ticket-footer {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--border);
+            justify-content: space-between;
+            margin-top: auto;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 12px;
+        }
+        .ticket-total {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--bg-dark-accent);
         }
 
-        .btn-despachar {
-            width: 100%;
-            background-color: var(--accent-green);
-            color: #ffffff;
+        /* Estado Visual de Proceso */
+        .status-indicator {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Botón Multifuncional Reactivo */
+        .btn-action-kds {
+            background: var(--bg-dark-accent);
+            color: var(--text-light);
             border: none;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-action-kds:active {
+            transform: scale(0.95);
         }
 
-        .btn-despachar:hover {
-            background-color: #059669;
-        }
-
-        /* Vista cuando no hay pedidos */
-        .no-orders {
+        /* Mensaje Vacío */
+        .empty-kds {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 24px;
             color: var(--text-muted);
         }
-
-        .no-orders i {
+        .empty-kds i {
             font-size: 3rem;
-            margin-bottom: 15px;
-            display: block;
-            color: var(--border);
+            color: rgba(0,0,0,0.06);
+            margin-bottom: 14px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Animaciones Genuinas */
+        @keyframes cardEnter {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes cardExit {
+            to { transform: scale(0.9) translateY(-20px); opacity: 0; }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(244, 182, 38, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(244, 182, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 182, 38, 0); }
+        }
+
+        .exit-animation {
+            animation: cardExit 0.3s ease-in forwards !important;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1><i class="fa-solid fa-desktop" style="color: var(--accent-green)"></i> Pantalla de Cocina (KDS) <span>Simulador Local</span></h1>
-        <div class="status-hub">
-            <i class="fa-solid fa-circle" style="color: var(--accent-green); font-size: 0.7rem;"></i> Sistema en Línea
-        </div>
+    <header class="kds-header">
+        <h1>Panel KDS <span>• Cocina</span></h1>
+        <div class="kds-subtitle">Monitor de Comandas en Tiempo Real | TecnoTrade PTY</div>
     </header>
 
-    <main class="grid-comandas" id="contenedor-comandas">
+    <section class="kds-summary">
+        <div class="summary-badge">En Espera <span id="count-espera">0</span></div>
+        <div class="summary-badge" style="border-bottom: 3px solid var(--accent-mustard);">En Cocina <span id="count-cocina">0</span></div>
+    </section>
+
+    <main class="matrix-container" id="kds-matrix">
         </main>
 
     <script>
-        // Función para cargar y pintar los pedidos desde el LocalStorage
-        function cargarPedidos() {
-            const contenedor = document.getElementById('contenedor-comandas');
-            const pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+        // Estructura interna de control para manejar los estados sin romper la base de datos local
+        // Estados posibles: 'espera' | 'pendiente'
+        let estadoPedidosInterno = {};
 
+        function cargarComandasDesdeLocalStorage() {
+            const matrix = document.getElementById('kds-matrix');
+            const pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+            
             // Limpiar contenedor
-            contenedor.innerHTML = '';
+            matrix.innerHTML = '';
 
             if (pedidos.length === 0) {
-                contenedor.innerHTML = `
-                    <div class="no-orders">
-                        <i class="fa-solid fa-receipt"></i>
-                        <p>No hay órdenes pendientes en este momento.</p>
+                matrix.innerHTML = `
+                    <div class="empty-kds">
+                        <i class="fa-solid fa-utensils"></i>
+                        <p style="font-weight:600; font-size:0.95rem;">No hay pedidos activos en este momento</p>
+                        <p style="font-size:0.8rem; margin-top:4px;">Las nuevas comandas del menú aparecerán aquí al instante.</p>
                     </div>
                 `;
+                actualizarContadores(0, 0);
                 return;
             }
 
-            // Pintar cada pedido en pantalla
-            pedidos.forEach(pedido => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'comanda-card';
-                tarjeta.innerHTML = `
-                    <div class="comanda-header">
-                        <h3>Mesa #${pedido.mesa}</h3>
-                        <span class="time">${pedido.hora}</span>
+            let enEsperaCount = 0;
+            let enCocinaCount = 0;
+
+            pedidos.forEach((pedido, index) => {
+                // Si el pedido no tiene un estado asignado en nuestra sesión, por defecto es 'espera'
+                if (!estadoPedidosInterno[pedido.id]) {
+                    estadoPedidosInterno[pedido.id] = 'espera';
+                }
+
+                const currentStatus = estadoPedidosInterno[pedido.id];
+                
+                // Configurar variables visuales de acuerdo al estado modificado
+                let classEstado = 'status-espera';
+                let labelEstado = 'En Espera ⏱️';
+                let btnTexto = 'Empezar';
+                let btnIcono = 'fa-fire-burner';
+
+                if (currentStatus === 'pendiente') {
+                    classEstado = 'status-pendiente';
+                    labelEstado = 'En Cocina 🔥';
+                    btnTexto = 'Despachar';
+                    btnIcono = 'fa-circle-check';
+                    enCocinaCount++;
+                } else {
+                    enEsperaCount++;
+                }
+
+                // Generar la tarjeta HTML estructurada
+                const ticket = document.createElement('div');
+                ticket.className = `order-ticket ${classEstado}`;
+                ticket.id = `ticket-${pedido.id}`;
+                ticket.innerHTML = `
+                    <div>
+                        <div class="ticket-header">
+                            <span class="ticket-id">${pedido.id}</span>
+                            <span class="ticket-time"><i class="fa-regular fa-clock"></i> ${pedido.hora || 'Ahora'}</span>
+                        </div>
+                        <div class="ticket-location">
+                            <i class="fa-solid fa-location-dot" style="color: var(--accent-mustard);"></i> 
+                            ${pedido.mesa}
+                        </div>
+                        <div class="ticket-items">${formatItems(pedido.items)}</div>
                     </div>
-                    <div class="comanda-body">
-                        <div class="items">${pedido.items}</div>
+                    <div class="ticket-footer">
+                        <span class="status-indicator">${labelEstado}</span>
+                        <button class="btn-action-kds" onclick="avanzarEstadoPedido('${pedido.id}', ${index})">
+                            <i class="fa-solid ${btnIcono}"></i> ${btnTexto}
+                        </button>
                     </div>
-                    <div class="comanda-footer">
-                        <span>Pago: ${pedido.metodo}</span>
-                        <strong>$${pedido.total}</strong>
-                    </div>
-                    <button class="btn-despachar" onclick="despacharPedido('${pedido.id}')">
-                        <i class="fa-solid fa-check"></i> Marcar Listo / Despachar
-                    </button>
                 `;
-                contenedor.appendChild(tarjeta);
+                matrix.appendChild(ticket);
             });
+
+            actualizarContadores(enEsperaCount, enCocinaCount);
         }
 
-        // Función para eliminar un pedido (Despachar)
-        function despacharPedido(id) {
-            let pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
-            // Filtrar para quitar el pedido seleccionado
-            pedidos = pedidos.filter(p => p.id !== id);
-            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidos));
-            
-            // Recargar la pantalla
-            cargarPedidos();
+        // Helper para asegurar que el formato de items se vea premium
+        function formatItems(itemsText) {
+            if (!itemsText) return "";
+            // Si viene separado por barras horizontales en vez de saltos lo acomodamos
+            return itemsText.replace(/ \| /g, '\n');
         }
 
-        // ESCUCHA MÁGICA: Detectar cambios desde la otra pestaña del menú en tiempo real
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'pedidos_restaurante') {
-                cargarPedidos();
-                // Reproducir un sonido de alerta nativo del navegador
-                try {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Nota LA
-                    oscillator.connect(audioCtx.destination);
-                    oscillator.start();
-                    oscillator.stop(audioCtx.currentTime + 0.15); // Duración 150ms
-                } catch(err) { console.log("Audio no permitido aún por interacción"); }
+        function actualizarContadores(espera, cocina) {
+            document.getElementById('count-espera').innerText = espera;
+            document.getElementById('count-cocina').innerText = cocina;
+        }
+
+        /* LÓGICA DE FLUJO INTERACTIVO (Doble Acción) */
+        function avanzarEstadoPedido(id, indexInStorage) {
+            const currentStatus = estadoPedidosInterno[id];
+            const ticketElement = document.getElementById(`ticket-${id}`);
+
+            if (currentStatus === 'espera') {
+                // PASO 1: Pasar de 'Espera' a 'Pendiente' (En Cocina)
+                estadoPedidosInterno[id] = 'pendiente';
+                // Recargar interfaz para aplicar estilos y animaciones fluidas
+                cargarComandasDesdeLocalStorage();
+            } else if (currentStatus === 'pendiente') {
+                // PASO 2: Despachar de forma definitiva
+                if (ticketElement) {
+                    ticketElement.classList.add('exit-animation');
+                }
+
+                // Esperar a que la animación termine antes de remover del localStorage
+                setTimeout(() => {
+                    let pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+                    
+                    // Filtrar el pedido removido para mantener la base de datos limpia
+                    pedidos = pedidos.filter(p => p.id !== id);
+                    localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidos));
+                    
+                    // Limpiar del mapa de estados temporales
+                    delete estadoPedidosInterno[id];
+
+                    // Refrescar la pantalla de cocina
+                    cargarComandasDesdeLocalStorage();
+                }, 300);
             }
-        });
+        }
 
-        // Cargar por primera vez al abrir la página
-        window.onload = cargarPedidos;
+        // Auto-consulta inteligente cada 4 segundos para detectar nuevos pedidos hechos desde el menú
+        setInterval(cargarComandasDesdeLocalStorage, 400);
+
+        // Carga inicial al abrir la pantalla
+        window.onload = cargarComandasDesdeLocalStorage;
     </script>
 </body>
 </html>
