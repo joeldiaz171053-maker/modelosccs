@@ -16,6 +16,7 @@
             --bg-dark-accent: #11141a; 
             --bg-card: #ffffff;
             --accent-mustard: #f4b626; 
+            --accent-green: #10b981;
             --text-main: #11141a;
             --text-muted: #8c9199;
             --text-light: #ffffff;
@@ -34,7 +35,7 @@
         body {
             background-color: var(--bg-base);
             color: var(--text-main);
-            padding-bottom: 140px;
+            padding-bottom: 160px;
             overflow-x: hidden;
             position: relative;
         }
@@ -68,7 +69,7 @@
         .btn-back:active { transform: scale(0.85); }
         .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; font-style: italic; color: var(--text-light); letter-spacing: 0.5px; }
 
-        /* Medidor de Antojo */
+        /* Medidor de Antojo Avanzado con Descuentos */
         .antojo-container {
             position: relative; z-index: 10; margin: 10px 24px 0 24px; padding: 14px 18px;
             background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -76,8 +77,12 @@
         }
         .antojo-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; color: var(--text-light); }
         #antojo-status { color: var(--accent-mustard); transition: all 0.3s; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .antojo-bar-bg { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; overflow: hidden; }
+        .antojo-bar-bg { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; overflow: hidden; position: relative; }
         .antojo-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #f4b626, #ffcb52); border-radius: 10px; transition: width 0.5s cubic-bezier(0.1, 1, 0.1, 1); }
+        
+        /* Indicadores de Marcadores de Descuento */
+        .antojo-milestones { display: flex; justify-content: space-between; font-size: 0.65rem; color: rgba(255,255,255,0.6); margin-top: 5px; font-weight: 600; }
+        .milestone-active { color: var(--accent-mustard); font-weight: 800; }
 
         /* Encabezado */
         .hero-banner { position: relative; z-index: 10; padding: 25px 24px 15px 24px; text-align: center; color: var(--text-light); }
@@ -122,7 +127,7 @@
         .dish-details h4 { font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; line-height: 1.2; }
         .dish-meta { font-size: 0.65rem; color: var(--text-muted); }
         
-        /* CONTROLES DE CANTIDAD PREMIUM (Sumar/Restar con Transición) */
+        /* Controles de Cantidad */
         .dish-action { display: flex; justify-content: space-between; align-items: center; min-height: 32px; }
         .dish-price { font-weight: 700; font-size: 1rem; }
         
@@ -147,7 +152,7 @@
         }
         .add-btn:active { transform: scale(0.7) rotate(90deg); }
 
-        /* Estado Activo si tiene items en carrito */
+        /* Reacción de Selección Activa */
         .dish-card.card-active { background-color: var(--accent-mustard) !important; box-shadow: var(--shadow-active); transform: translateY(-4px); }
         .dish-card.card-active .dish-details h4, .dish-card.card-active .dish-price { color: var(--text-light); }
         .dish-card.card-active .dish-meta { color: rgba(255, 255, 255, 0.8); }
@@ -156,7 +161,7 @@
         .dish-card.card-active .qty-number { color: var(--text-light); }
         .dish-card.card-active .card-img-wrapper { transform: translateX(-50%) scale(1.05); }
 
-        /* Barra Inferior del Carrito */
+        /* Barra de Checkout Flotante */
         .cart-bar {
             position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
             width: calc(100% - 48px); max-width: 400px;
@@ -167,9 +172,10 @@
             transition: var(--spring-transition); transform-origin: center bottom;
         }
         .cart-bar.bump { transform: translateX(-50%) scale(1.06); background: var(--bg-card); }
-        .cart-total p { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-        .cart-total h3 { font-size: 1.3rem; font-weight: 700; }
-        .pay-btn { background: var(--text-main); color: var(--bg-card); border: none; padding: 12px 24px; border-radius: 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .cart-total p { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+        .cart-total h3 { font-size: 1.2rem; font-weight: 800; line-height: 1.1; }
+        .cart-discount-label { font-size: 0.7rem; color: var(--accent-green); font-weight: 700; display: none; margin-top: 2px; }
+        .pay-btn { background: var(--text-main); color: var(--bg-card); border: none; padding: 12px 22px; border-radius: 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
         /* Modales */
         .modal {
@@ -198,7 +204,7 @@
         .action-btn { width: 100%; background: var(--text-main); color: var(--bg-card); border: none; padding: 14px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 10px; }
         .close-modal { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-top: 14px; display: inline-block; }
 
-        /* TICKET VIP COMPROBANTE */
+        /* Recibo Digital / Ticket Estilo Térmico */
         .ticket-view { display: none; flex-direction: column; align-items: center; animation: ticketPrint 0.6s cubic-bezier(0.1, 1, 0.1, 1) both; }
         .ticket-body { background: #fff; border: 1px dashed #ccc; padding: 20px; border-radius: 12px; width: 100%; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.04); position: relative; }
         .ticket-body::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 12px; background: linear-gradient(-45deg, var(--bg-card) 6px, transparent 0), linear-gradient(45deg, var(--bg-card) 6px, transparent 0); background-size: 12px 12px; }
@@ -234,6 +240,11 @@
         </div>
         <div class="antojo-bar-bg">
             <div id="antojo-bar" class="antojo-bar-fill"></div>
+        </div>
+        <div class="antojo-milestones">
+            <span id="ms-0">Inicio</span>
+            <span id="ms-20">$20 (5% OFF)</span>
+            <span id="ms-50">$50 (10% OFF)</span>
         </div>
     </div>
 
@@ -325,8 +336,9 @@
 
     <div class="cart-bar" id="cart-container">
         <div class="cart-total">
-            <p>Subtotal Cuenta</p>
+            <p>Total a Pagar</p>
             <h3 id="total-view">$0.00</h3>
+            <div id="cart-discount-view" class="cart-discount-label"></div>
         </div>
         <button class="pay-btn" onclick="openPaymentModal()">Pedir Cuenta <i class="fa-solid fa-arrow-right"></i></button>
     </div>
@@ -359,7 +371,7 @@
 
             <div id="step-payment" style="display: none;">
                 <h3>Selecciona tu método</h3>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Transacción simulada conectada al panel KDS.</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Transacción simulada conectada al panel KDS con descuento.</p>
                 <div class="payment-methods">
                     <div class="method-card" onclick="processOrder('Yappy')"><i class="fa-solid fa-mobile-screen"></i>Yappy</div>
                     <div class="method-card" onclick="processOrder('Visa')"><i class="fa-solid fa-cc-visa"></i>Tarjeta</div>
@@ -378,7 +390,8 @@
                     <p style="font-size: 0.75rem;" id="t-meta">Ubicación: Mesa 04</p>
                     <hr style="border: none; border-top: 1px dashed #ddd; margin: 12px 0;">
                     <p style="font-size: 0.75rem; font-weight: 700; color: #333;" id="t-items"></p>
-                    <h4 style="margin-top: 12px; font-size: 1.1rem; color: var(--text-main);" id="t-total">Total: $0.00</h4>
+                    <p style="font-size: 0.7rem; color: var(--accent-green); margin-top: 5px; font-weight: 600;" id="t-discount-applied"></p>
+                    <h4 style="margin-top: 8px; font-size: 1.1rem; color: var(--text-main);" id="t-total">Total: $0.00</h4>
                     <div class="barcode"></div>
                 </div>
 
@@ -397,14 +410,16 @@
             'card-trago': { name: 'Cóctel del Istmo', price: 8.50, qty: 0 }
         };
 
-        let currentTotal = 0;
+        let subtotalAcumulado = 0;
+        let totalConDescuento = 0;
+        let porcentajeDescuento = 0;
         let currentCategory = 'all';
         let logisticType = 'dinein';
 
         const urlParams = new URLSearchParams(window.location.search);
         const numeroMesa = urlParams.get('mesa') || "04";
 
-        /* SISTEMA INTELIGENTE DE CONTROL DE CANTIDADES (SUMAR Y RESTAR) */
+        /* CONTROL DE CANTIDADES (SUMAR Y RESTAR) */
         function modifyQty(id, change) {
             const prod = productosData[id];
             const oldQty = prod.qty;
@@ -412,9 +427,11 @@
 
             if (prod.qty < 0) prod.qty = 0;
 
-            // Recalcular subtotal exacto de la cuenta
-            currentTotal += (prod.qty - oldQty) * prod.price;
-            document.getElementById('total-view').innerText = `$${currentTotal.toFixed(2)}`;
+            // Recalcular subtotal
+            subtotalAcumulado += (prod.qty - oldQty) * prod.price;
+            
+            // Evaluar reglas comerciales del medidor de antojo
+            evaluarDescuentosYMontos();
 
             // Actualizar la interfaz de la tarjeta del producto
             const container = document.getElementById(`action-container-${id}`);
@@ -438,22 +455,52 @@
             const cart = document.getElementById('cart-container');
             cart.classList.add('bump');
             setTimeout(() => cart.classList.remove('bump'), 400);
-
-            updateAntojoMeter();
         }
 
-        function updateAntojoMeter() {
+        /* LÓGICA FINANCIERA DEL MEDIDOR DE ANTOJO */
+        function evaluarDescuentosYMontos() {
             const bar = document.getElementById('antojo-bar');
             const status = document.getElementById('antojo-status');
+            const discountLabel = document.getElementById('cart-discount-view');
             
-            let percentage = (currentTotal / 30) * 100;
-            if (percentage > 100) percentage = 100;
-            bar.style.width = `${percentage}%`;
+            // Resetear estados por defecto
+            porcentajeDescuento = 0;
+            document.getElementById('ms-20').classList.remove('milestone-active');
+            document.getElementById('ms-50').classList.remove('milestone-active');
 
-            if (currentTotal === 0) { status.innerText = "¡Explora el menú! 🍽️"; }
-            else if (currentTotal < 12) { status.innerText = "Buen comienzo... 🍔"; }
-            else if (currentTotal < 24) { status.innerText = "¡Combo Excelente! 🥤"; }
-            else { status.innerText = "¡Nivel Antojo Leyenda! 🍹🔥"; }
+            // Determinar porcentaje e hitos comerciales
+            if (subtotalAcumulado >= 50) {
+                porcentajeDescuento = 0.10; // 10% Descuento
+                status.innerText = "¡Nivel Antojo Leyenda! 10% OFF 🎉";
+                document.getElementById('ms-50').classList.add('milestone-active');
+            } else if (subtotalAcumulado >= 20) {
+                porcentajeDescuento = 0.05; // 5% Descuento
+                status.innerText = "¡Súper Antojo! Desbloqueaste 5% OFF 🔥";
+                document.getElementById('ms-20').classList.add('milestone-active');
+            } else if (subtotalAcumulado > 0) {
+                let faltante = (20 - subtotalAcumulado).toFixed(2);
+                status.innerText = `¡Faltan $${faltante} para el 5% OFF! 🍔`;
+            } else {
+                status.innerText = "¡Explora el menú! 🍽️";
+            }
+
+            // Renderizar la barra de progreso (Tomando $50 como el 100%)
+            let porcentajeBarra = (subtotalAcumulado / 50) * 100;
+            if (porcentajeBarra > 100) porcentajeBarra = 100;
+            bar.style.width = `${porcentajeBarra}%`;
+
+            // Calcular total neto con descuento restado
+            let montoDescontado = subtotalAcumulado * porcentajeDescuento;
+            totalConDescuento = subtotalAcumulado - montoDescontado;
+
+            // Renderizar en la barra flotante inferior
+            document.getElementById('total-view').innerText = `$${totalConDescuento.toFixed(2)}`;
+            if (porcentajeDescuento > 0) {
+                discountLabel.innerText = `Descuento del ${porcentajeDescuento * 100}% aplicado (-$${montoDescontado.toFixed(2)})`;
+                discountLabel.style.display = "block";
+            } else {
+                discountLabel.style.display = "none";
+            }
         }
 
         /* MANEJO LOGÍSTICO */
@@ -481,9 +528,8 @@
             document.getElementById('step-logistics').style.display = 'block';
         }
 
-        /* ENVÍO CRÍTICO CORREGIDO AL PANEL-CONTROL DE COCINA HTML */
+        /* ENVIAR PEDIDO CON CONEXIÓN COMPATIBLE HACIA TU KDS */
         function processOrder(method) {
-            // Reconstruir la comanda basándonos en los estados de cantidad vigentes
             const lineasComanda = [];
             for (const key in productosData) {
                 if (productosData[key].qty > 0) {
@@ -502,43 +548,49 @@
                 destinoFinal = `PICK-UP (${nombre} - ${horaRetiro})`;
             }
 
-            // Objeto de persistencia compatible con tu panel actual
+            // Creación del objeto de sincronización con el total neto final ya calculado
             const nuevoPedido = {
                 id: pedID,
                 mesa: destinoFinal, 
                 items: textoComanda,
-                total: currentTotal.toFixed(2),
+                total: totalConDescuento.toFixed(2), // Sincroniza el precio real con descuento a cocina
                 metodo: method,
                 hora: horaActual
             };
 
-            // Inyección blindada en localStorage
+            // Guardado blindado en localStorage
             let pedidosActivos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
             pedidosActivos.push(nuevoPedido);
             localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidosActivos));
 
-            // Actualización de la pantalla del Ticket VIP
+            // Actualización de datos visuales en el Ticket VIP final
             document.getElementById('t-id').innerText = `ID: ${pedID}`;
             document.getElementById('t-type').innerText = `Método: ${method}`;
             document.getElementById('t-meta').innerText = `Entrega: ${destinoFinal}`;
             document.getElementById('t-items').innerText = textoComanda.replace(/\n/g, ' | ');
-            document.getElementById('t-total').innerText = `Total: $${currentTotal.toFixed(2)}`;
+            
+            const txtDescuento = document.getElementById('t-discount-applied');
+            if (porcentajeDescuento > 0) {
+                txtDescuento.innerText = `Beneficio Medidor: ${porcentajeDescuento * 100}% de descuento aplicado de forma exitosa.`;
+                txtDescuento.style.display = "block";
+            } else {
+                txtDescuento.style.display = "none";
+            }
+            document.getElementById('t-total').innerText = `Total Neto: $${totalConDescuento.toFixed(2)}`;
 
             document.getElementById('step-payment').style.display = 'none';
             document.getElementById('step-ticket').style.display = 'flex';
         }
 
         function resetEverything() {
-            // Vaciar cantidades limpiamente
             for (const key in productosData) {
                 productosData[key].qty = 0;
                 document.getElementById(`action-container-${key}`).innerHTML = `<button class="add-btn" onclick="modifyQty('${key}', 1)"><i class="fa-solid fa-plus"></i></button>`;
                 document.getElementById(key).classList.remove('card-active');
             }
-            currentTotal = 0;
-            document.getElementById('total-view').innerText = `$0.00`;
+            subtotalAcumulado = 0;
+            evaluarDescuentosYMontos();
             document.getElementById('client-name').value = '';
-            updateAntojoMeter();
             closePaymentModal();
             
             document.getElementById('step-ticket').style.display = 'none';
@@ -594,7 +646,7 @@
             });
         }
 
-        function openPaymentModal() { if (currentTotal > 0) document.getElementById('payment-modal').classList.add('open'); }
+        function openPaymentModal() { if (subtotalAcumulado > 0) document.getElementById('payment-modal').classList.add('open'); }
         function closePaymentModal() { document.getElementById('payment-modal').classList.remove('open'); }
 
         // Parallax sutil de fondo
