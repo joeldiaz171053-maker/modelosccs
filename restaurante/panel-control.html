@@ -1,149 +1,348 @@
-<script>
-        // Estructura interna de control para manejar los estados sin romper la base de datos local
-        let estadoPedidosInterno = {};
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control KDS Profesional | TecnoTrade PTY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        function cargarComandasDesdeLocalStorage() {
+    <style>
+        :root {
+            --bg-base: #f4f3ef; 
+            --bg-dark-accent: #11141a; 
+            --bg-card: #ffffff;
+            --accent-mustard: #f4b626; 
+            --accent-orange: #f97316;
+            --accent-red: #ef4444;
+            --accent-green: #10b981;
+            --text-main: #11141a;
+            --text-muted: #8c9199;
+            --text-light: #ffffff;
+            --border-subtle: rgba(0, 0, 0, 0.05);
+            --shadow-soft: 0 12px 35px rgba(150, 145, 135, 0.1);
+            --spring-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+        body { background-color: var(--bg-base); color: var(--text-main); min-height: 100vh; padding-bottom: 80px; }
+
+        /* Cabecera KDS */
+        .kds-header {
+            background-color: var(--bg-dark-accent); padding: 25px 24px; text-align: center; color: var(--text-light);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .kds-header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; letter-spacing: 0.5px; }
+        .kds-header h1 span { font-style: italic; color: var(--accent-mustard); }
+        
+        /* Controles Superiores Avanzados */
+        .kds-control-bar {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+            width: 100%; max-width: 1200px; margin-top: 10px; gap: 12px;
+        }
+
+        /* Selector de Estación (Filtros) */
+        .station-nav { display: flex; gap: 8px; background: rgba(255,255,255,0.06); padding: 4px; border-radius: 12px; }
+        .station-btn {
+            background: transparent; border: none; color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 700;
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .station-btn.active { background: var(--accent-mustard); color: var(--bg-dark-accent); }
+
+        /* Botón Recuperar Último */
+        .btn-undo {
+            background: rgba(244, 182, 38, 0.15); color: var(--accent-mustard); border: 1px dashed var(--accent-mustard);
+            padding: 8px 16px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+            display: none; align-items: center; gap: 6px; transition: all 0.2s;
+        }
+        .btn-undo:active { transform: scale(0.95); }
+
+        /* Resumen de Estados */
+        .kds-summary { display: flex; justify-content: center; gap: 16px; margin: -20px auto 30px auto; position: relative; z-index: 10; max-width: 700px; padding: 0 24px; }
+        .summary-badge { background: var(--bg-card); padding: 10px 16px; border-radius: 16px; box-shadow: var(--shadow-soft); flex: 1; text-align: center; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--border-subtle); }
+        .summary-badge span { display: block; font-size: 1.3rem; margin-top: 2px; }
+
+        /* Matriz de Tickets */
+        .matrix-container { padding: 0 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; }
+
+        /* Tarjeta de Ticket de Cocina */
+        .order-ticket {
+            background: var(--bg-card); border-radius: 22px; box-shadow: var(--shadow-soft);
+            border: 2px solid #cbd5e1; padding: 20px; display: flex; flex-direction: column;
+            justify-content: space-between; position: relative; transition: var(--spring-transition);
+            animation: cardEnter 0.4s ease-out both; overflow: hidden;
+        }
+
+        /* ALERTA DE TIEMPOS MEDIANTE COLORES CROMÁTICOS */
+        .time-normal { border-color: #cbd5e1; }
+        .time-warning { border-color: var(--accent-orange); box-shadow: 0 10px 25px rgba(249, 115, 22, 0.1); }
+        .time-critical { border-color: var(--accent-red); animation: criticalPulse 2s infinite; }
+
+        /* Estados de Cocción */
+        .status-pendiente { background: rgba(244, 182, 38, 0.03); }
+        .status-pendiente .status-indicator { background: rgba(244, 182, 38, 0.12); color: #d97706; }
+        .status-pendiente .btn-action-kds { background: var(--accent-orange) !important; }
+
+        /* Banner de Despacho Logístico */
+        .delivery-banner {
+            margin: -20px -20px 14px -20px; padding: 10px 20px; font-size: 0.8rem; font-weight: 800;
+            text-transform: uppercase; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;
+        }
+        .banner-dinein { background: #e2e8f0; color: #334155; }
+        .banner-pickup { background: rgba(16, 185, 129, 0.12); color: #047857; border-bottom: 1px solid rgba(16, 185, 129, 0.2); }
+
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .ticket-id { font-family: monospace; font-weight: 800; font-size: 1.1rem; color: var(--bg-dark-accent); }
+        .ticket-timer { font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: #f4f3ef; }
+        .timer-normal { color: var(--text-main); }
+        .timer-warning { color: var(--accent-orange); font-weight: 800; }
+        .timer-critical { color: var(--text-light); background: var(--accent-red) !important; }
+
+        .ticket-items { font-size: 1rem; font-weight: 700; color: #1e293b; line-height: 1.6; margin-bottom: 20px; white-space: pre-line; flex-grow: 1; }
+        .ticket-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; border-top: 1px solid var(--border-subtle); padding-top: 12px; }
+        .ticket-total { font-weight: 800; font-size: 1.1rem; }
+        .status-indicator { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+
+        .btn-action-kds {
+            background: var(--bg-dark-accent); color: var(--text-light); border: none; padding: 10px 16px;
+            border-radius: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+        }
+        .btn-action-kds:active { transform: scale(0.95); }
+
+        .empty-kds { grid-column: 1 / -1; text-align: center; padding: 80px 24px; color: var(--text-muted); }
+        .empty-kds i { font-size: 3rem; color: rgba(0,0,0,0.05); margin-bottom: 14px; }
+
+        @keyframes cardEnter { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes criticalPulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); border-color: #ef4444; } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); border-color: #f87171; } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); border-color: #ef4444; } }
+        .exit-animation { transform: scale(0.9) translateY(-15px) !important; opacity: 0 !important; transition: all 0.3s ease-in; }
+    </style>
+</head>
+<body>
+
+    <header class="kds-header">
+        <h1>Panel KDS <span>• Inteligente</span></h1>
+        <div class="kds-control-bar">
+            <div class="station-nav">
+                <button class="station-btn active" id="st-all" onclick="setStationFilter('all', this)">Ver Todo</button>
+                <button class="station-btn" onclick="setStationFilter('cocina', this)">🍔 Cocina</button>
+                <button class="station-btn" onclick="setStationFilter('barra', this)">🍹 Barra</button>
+            </div>
+            <button class="btn-undo" id="undo-trigger" onclick="recuperarUltimoPedido()">
+                <i class="fa-solid fa-rotate-left"></i> Recuperar Último
+            </button>
+        </div>
+    </header>
+
+    <section class="kds-summary">
+        <div class="summary-badge" style="border-bottom: 3px solid #cbd5e1;">Nuevos <span id="count-espera" style="color: #64748b;">0</span></div>
+        <div class="summary-badge" style="border-bottom: 3px solid var(--accent-mustard);">En Cocina <span id="count-cocina" style="color: #d97706;">0</span></div>
+        <div class="summary-badge" style="border-bottom: 3px solid var(--accent-red);">Demorados <span id="count-criticos" style="color: var(--accent-red);">0</span></div>
+    </section>
+
+    <main class="matrix-container" id="kds-matrix">
+        </main>
+
+    <script>
+        let estadoPedidosInterno = {};
+        let registroTiemposOrigen = {}; // Guarda la estampa de tiempo exacta cuando el panel detectó la orden
+        let historialDespachados = []; // Pila para la función de recuperar comanda
+        let currentStationFilter = 'all';
+        let idsConocidosPreviamente = [];
+
+        // Generador de Campana Sintética Nativat (¡Sonido Profesional!)
+        function emitirTimbreNuevaOrden() {
+            try {
+                let ctx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = ctx.createOscillator();
+                let gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(988.37, ctx.currentTime); // Nota Si5 cristalina
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(); osc.stop(ctx.currentTime + 0.4);
+            } catch(e) { console.log("Audio en espera de interacción usuario."); }
+        }
+
+        function setStationFilter(station, btn) {
+            currentStationFilter = station;
+            document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderizarPantallaKDS();
+        }
+
+        function renderizarPantallaKDS() {
             const matrix = document.getElementById('kds-matrix');
             const pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
-            
-            // Si el almacenamiento local está vacío, limpiamos por completo y mostramos el mensaje vacío
-            if (pedidos.length === 0) {
+
+            // 1. Validar si hay órdenes entrantes para sonar el timbre
+            const idsActuales = pedidos.map(p => p.id);
+            let hayNuevos = idsActuales.some(id => !idsConocidosPreviamente.includes(id));
+            if (hayNuevos && idsConocidosPreviamente.length > 0) {
+                emitirTimbreNuevaOrden();
+            }
+            idsConocidosPreviamente = idsActuales;
+
+            // Mostrar botón Deshacer si hay historial
+            document.getElementById('undo-trigger').style.display = (historialDespachados.length > 0) ? 'flex' : 'none';
+
+            // 2. Filtrar pedidos según la estación seleccionada
+            const pedidosFiltrados = pedidos.filter(pedido => {
+                if (currentStationFilter === 'all') return true;
+                const txt = pedido.items.toLowerCase();
+                const tieneCocina = txt.includes('hamburguesa') || txt.includes('pizza');
+                const tieneBarra = txt.includes('soda') || txt.includes('cóctel') || txt.includes('coctel');
+                
+                if (currentStationFilter === 'cocina') return tieneCocina;
+                if (currentStationFilter === 'barra') return tieneBarra;
+                return true;
+            });
+
+            if (pedidosFiltrados.length === 0) {
                 matrix.innerHTML = `
                     <div class="empty-kds">
-                        <i class="fa-solid fa-utensils"></i>
-                        <p style="font-weight:600; font-size:0.95rem;">No hay pedidos activos en este momento</p>
-                        <p style="font-size:0.8rem; margin-top:4px;">Las nuevas comandas del menú aparecerán aquí al instante.</p>
+                        <i class="fa-solid fa-circle-nodes"></i>
+                        <p style="font-weight:600; font-size:0.95rem;">Estación despejada o sin órdenes</p>
                     </div>
                 `;
-                actualizarContadores(0, 0);
-                // Limpiar estados internos obsoletos
-                estadoPedidosInterno = {};
+                actualizarContadoresGlobales(pedidos);
                 return;
             }
 
-            // Eliminar de la pantalla los tickets visuales de pedidos que ya no existen en el localStorage (por si se borraron en otra pestaña)
-            const idsNuevos = pedidos.map(p => p.id);
-            document.querySelectorAll('.order-ticket').forEach(ticketVisual => {
-                const idVisual = ticketVisual.id.replace('ticket-', '');
-                if (!idsNuevos.includes(idVisual)) {
-                    ticketVisual.remove();
-                    delete estadoPedidosInterno[idVisual];
-                }
-            });
+            // Limpieza y re-inyección controlada basada en fragmentos estables
+            matrix.innerHTML = '';
+            const ahora = Date.now();
 
-            // Si antes había un mensaje de "No hay pedidos activos", limpiamos el contenedor para meter las tarjetas
-            if (document.querySelector('.empty-kds')) {
-                matrix.innerHTML = '';
-            }
+            pedidosFiltrados.forEach((pedido) => {
+                // Inicializar estados internos si no existen
+                if (!estadoPedidosInterno[pedido.id]) estadoPedidosInterno[pedido.id] = 'espera';
+                if (!registroTiemposOrigen[pedido.id]) registroTiemposOrigen[pedido.id] = ahora;
 
-            let enEsperaCount = 0;
-            let enCocinaCount = 0;
+                const status = estadoPedidosInterno[pedido.id];
+                const tiempoTranscurridoMins = Math.floor((ahora - registroTiemposOrigen[pedido.id]) / 60000);
 
-            pedidos.forEach((pedido, index) => {
-                // Si el pedido no tiene un estado asignado en nuestra sesión, por defecto es 'espera'
-                if (!estadoPedidosInterno[pedido.id]) {
-                    estadoPedidosInterno[pedido.id] = 'espera';
-                }
-
-                const currentStatus = estadoPedidosInterno[pedido.id];
-                
-                // Configurar variables visuales de acuerdo al estado modificado
-                let classEstado = 'status-espera';
-                let labelEstado = 'En Espera ⏱️';
-                let btnTexto = 'Empezar';
-                let btnIcono = 'fa-fire-burner';
-
-                if (currentStatus === 'pendiente') {
-                    classEstado = 'status-pendiente';
-                    labelEstado = 'En Cocina 🔥';
-                    btnTexto = 'Despachar';
-                    btnIcono = 'fa-circle-check';
-                    enCocinaCount++;
-                } else {
-                    enEsperaCount++;
+                // Configurar semáforo cromático de alerta de tiempo
+                let classTiempo = 'time-normal';
+                let classTimerBadge = 'timer-normal';
+                if (tiempoTranscurridoMins >= 4) {
+                    classTiempo = 'time-critical';
+                    classTimerBadge = 'timer-critical';
+                } else if (tiempoTranscurridoMins >= 2) {
+                    classTiempo = 'time-warning';
+                    classTimerBadge = 'timer-warning';
                 }
 
-                // DETECCIÓN DE ELEMENTO EXISTENTE: Evita el bucle de animación
-                let ticket = document.getElementById(`ticket-${pedido.id}`);
-                
-                if (!ticket) {
-                    // SI NO EXISTE: Es una orden nueva, se crea y se le permite ejecutar la animación de entrada
-                    ticket = document.createElement('div');
-                    ticket.id = `ticket-${pedido.id}`;
-                    // Mantenemos la clase base, la del estado y agregamos explícitamente la animación de entrada inicial
-                    ticket.className = `order-ticket ${classEstado}`;
-                    matrix.appendChild(ticket);
-                } else {
-                    // SI YA EXISTE: Solo actualizamos sus clases de estado por si cambió, removiendo efectos repetitivos
-                    ticket.className = `order-ticket ${classEstado}`;
-                }
+                // Configurar etiquetas de preparación
+                let classCoccion = (status === 'pendiente') ? 'status-pendiente' : '';
+                let labelStatus = (status === 'pendiente') ? 'En Cocina 🔥' : 'En Espera ⏱️';
+                let btnTexto = (status === 'pendiente') ? 'Despachar' : 'Preparar';
+                let btnIcono = (status === 'pendiente') ? 'fa-circle-check' : 'fa-fire-burner';
 
-                // Actualizamos el contenido interno de forma limpia sin re-renderizar el nodo contenedor externo
-                ticket.innerHTML = `
+                // Configurar Banner de Entrega Logística (Mesa vs Pick-Up)
+                let esPickUp = pedido.mesa.toLowerCase().includes('pick-up');
+                let bannerHTML = esPickUp 
+                    ? `<div class="delivery-banner banner-pickup"><i class="fa-solid fa-bag-shopping"></i> PARA LLEVAR: ${pedido.mesa.replace('PICK-UP (', '').replace(')', '')}</div>`
+                    : `<div class="delivery-banner banner-dinein"><i class="fa-solid fa-chair"></i> SERVICIO LOCAL • ${pedido.mesa}</div>`;
+
+                const card = document.createElement('div');
+                card.className = `order-ticket ${classTiempo} ${classCoccion}`;
+                card.id = `ticket-${pedido.id}`;
+                card.innerHTML = `
+                    ${bannerHTML}
                     <div>
                         <div class="ticket-header">
                             <span class="ticket-id">${pedido.id}</span>
-                            <span class="ticket-time"><i class="fa-regular fa-clock"></i> ${pedido.hora || 'Ahora'}</span>
+                            <span class="ticket-timer ${classTimerBadge}"><i class="fa-solid fa-stopwatch"></i> ${tiempoTranscurridoMins} min</span>
                         </div>
-                        <div class="ticket-location">
-                            <i class="fa-solid fa-location-dot" style="color: var(--accent-mustard);"></i> 
-                            ${pedido.mesa}
-                        </div>
-                        <div class="ticket-items">${formatItems(pedido.items)}</div>
+                        <div class="ticket-items">${pedido.items}</div>
                     </div>
                     <div class="ticket-footer">
-                        <span class="status-indicator">${labelEstado}</span>
-                        <button class="btn-action-kds" onclick="avanzarEstadoPedido('${pedido.id}', ${index})">
+                        <span class="status-indicator">${labelStatus}</span>
+                        <button class="btn-action-kds" onclick="gestionarFlujoKDS('${pedido.id}')">
                             <i class="fa-solid ${btnIcono}"></i> ${btnTexto}
                         </button>
                     </div>
                 `;
+                matrix.appendChild(card);
             });
 
-            actualizarContadores(enEsperaCount, enCocinaCount);
+            actualizarContadoresGlobales(pedidos);
         }
 
-        // Helper para asegurar que el formato de items se vea premium
-        function formatItems(itemsText) {
-            if (!itemsText) return "";
-            return itemsText.replace(/ \| /g, '\n');
-        }
+        function actualizarContadoresGlobales(todosLosPedidos) {
+            let espera = 0, cocina = 0, criticos = 0;
+            const ahora = Date.now();
 
-        function actualizarContadores(espera, cocina) {
+            todosLosPedidos.forEach(p => {
+                const status = estadoPedidosInterno[p.id] || 'espera';
+                const mins = registroTiemposOrigen[p.id] ? Math.floor((ahora - registroTiemposOrigen[p.id]) / 60000) : 0;
+                
+                if (status === 'pendiente') cocina++;
+                else espera++;
+
+                if (mins >= 4) criticos++;
+            });
+
             document.getElementById('count-espera').innerText = espera;
             document.getElementById('count-cocina').innerText = cocina;
+            document.getElementById('count-criticos').innerText = criticos;
         }
 
-        /* LÓGICA DE FLUJO INTERACTIVO (Doble Acción) */
-        function avanzarEstadoPedido(id, indexInStorage) {
+        function gestionarFlujoKDS(id) {
             const currentStatus = estadoPedidosInterno[id];
-            const ticketElement = document.getElementById(`ticket-${id}`);
+            const targetCard = document.getElementById(`ticket-${id}`);
 
             if (currentStatus === 'espera') {
-                // PASO 1: Pasar de 'Espera' a 'Pendiente' (En Cocina)
                 estadoPedidosInterno[id] = 'pendiente';
-                cargarComandasDesdeLocalStorage();
+                renderizarPantallaKDS();
             } else if (currentStatus === 'pendiente') {
-                // PASO 2: Despachar de forma definitiva con animación de salida
-                if (ticketElement) {
-                    ticketElement.classList.add('exit-animation');
-                }
+                if (targetCard) targetCard.classList.add('exit-animation');
 
-                // Esperar a que la animación termine antes de remover del localStorage
                 setTimeout(() => {
                     let pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+                    const pedidoADespachar = pedidos.find(p => p.id === id);
+                    
+                    if (pedidoADespachar) {
+                        // Guardar en la pila de deshacer antes de eliminar
+                        historialDespachados.push({
+                            pedido: pedidoADespachar,
+                            status: 'pendiente',
+                            tiempo: registroTiemposOrigen[id]
+                        });
+                    }
+
                     pedidos = pedidos.filter(p => p.id !== id);
                     localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidos));
                     
                     delete estadoPedidosInterno[id];
-                    cargarComandasDesdeLocalStorage();
+                    delete registroTiemposOrigen[id];
+                    
+                    renderizarPantallaKDS();
                 }, 300);
             }
         }
 
-        // Auto-consulta inteligente cada 4 segundos sin bucles visuales
-        setInterval(cargarComandasDesdeLocalStorage, 400);
+        function recuperarUltimoPedido() {
+            if (historialDespachados.length === 0) return;
+            const elementoRecuperado = historialDespachados.pop();
+            
+            let pedidos = JSON.parse(localStorage.getItem('pedidos_restaurante')) || [];
+            pedidos.push(elementoRecuperado.pedido);
+            localStorage.setItem('pedidos_restaurante', JSON.stringify(pedidos));
 
-        // Carga inicial al abrir la pantalla
-        window.onload = cargarComandasDesdeLocalStorage;
+            // Restablecer su estampa de tiempo y estado exactos
+            estadoPedidosInterno[elementoRecuperado.pedido.id] = elementoRecuperado.status;
+            registroTiemposOrigen[elementoRecuperado.pedido.id] = elementoRecuperado.tiempo;
+
+            renderizarPantallaKDS();
+        }
+
+        // Bucle de sincronización limpio a 3 segundos para refrescar tiempos y órdenes sin pestañeos
+        setInterval(renderizarPantallaKDS, 3000);
+        window.onload = renderizarPantallaKDS;
     </script>
+</body>
+</html>
